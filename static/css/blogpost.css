@@ -77,9 +77,9 @@ h2 {
     /* Zorg ervoor dat alles gecentreerd blijft */
     .sidebar, .main-content, .blog-container {
         align-items: center;
-        text-align: center;
     }
 }
+
 pre {
     background-color: #000615; /* Donkere achtergrondkleur */
     border-radius: 5px; /* Afgeronde hoeken */
