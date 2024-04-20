@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/components/prism-bash.min.js"></script>
+
+<link rel="stylesheet" href="static/css/blogpost.css">
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to use Vimwiki-Markdown and Pandoc to generate presentatios from notes on the fly</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+
+<script src="https://unpkg.com/prismjs/prism.js"></script>
+<body>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+
+    <div class="blog-container">
+        <div class="blog-header">
+            <a href="/" class="home-link"><i class="fas fa-arrow-left"></i> Home Page</a>
+            <span class="blog-info">12 april 2024 | 5 min read</span>
+        </div>
+        <hr>
+	<h1 style="font-size:2.5em;">How to use Vimwiki-Markdown and Pandoc to generate presentations from notes on the fly</h1>
+        <p>
+
+	<em style="font-size: 20px">
+	A while back I had an internship for which some research needed to be done. During that time I was taking notes with Vimwiki. When a meeting was spontaneously scheduled, I needed to present my findings clearly. 
+	Therefore, I wrote some scripts and changed some configs to get the small technique written here to work. I hope this will be useful to someone in a similar position, or to someone who might take inspiration from the way these configs are written.
+	</em>
+
+	</p>
+        <p style="font-size:20px;">
+
+	<video width="100%" autoplay loop style="padding-bottom: 20px;">
+		    <source src="{{ url_for('static', filename='videos/my-blogpost-demo.mp4')  }}" type="video/mp4">
+		        Jouw browser ondersteunt geen video tag.
+	</video>
+
+	In practice, you write your notes in Vimwiki, incorporating the markdown extension - and snippets. Then with some keybinds you can easily turn them into a presentation instantly.
+
+	I use Artix Runit linux with DWM and ST. You can find my config files on my GitHub. However, that's obviously no requirement here, with a bit of creativity this approach or a variant, will work on any system. Make sure to have vimwiki and vim-markdown plugs installed. I use vim-plugged.
+	</p>
+        <h2> Vimwiki </h2>
+        <p style="font-size: 18px;">
+
+	Vimwiki is a tool used for keeping personal notes. It's essentially just writing a file in vim, but with extra functionality which allows you to create file hierarchies and navigate through these hierarchies quickly.
+	Here's the only Vimwiki keybinds you need to familiarise with for using it:
+	<pre><code class="custom-code">
+	"Enter on word" creates a wiki
+	"Enter on a wiki" navigates to that wiki
+	"Ctrl + O" moves to previous wiki
+	"Ctrl + I" toggles wikis in a file
+	</code></pre>
+
+        <p style="font-size: 18px;">
+
+	You can see how this could be very useful for going deep into a subject. However there are some things that I consider indispensable for really using it. Here is my config in my vimrc, which I will explain in what follows.
+<pre><code class="language-bash custom-code">
+let g:vimwiki_list = [
+  {
+    'path': '~/dl/notebooks/',
+    'index': 'index',
+    'syntax': 'markdown',
+    'ext': '.md',
+    'auto_export': 0,
+    'template_path': '~/dl/notebooks/',
+    'template_default': 'default',
+    'template_ext': '.tpl',
+    'nested_syntaxes': {'python': 'python', 'bash': 'sh'},
+    'diary_rel_path': 'journal/',
+    'diary_index': 'index'
+  }
+]
+map <leader>wi :VimwikiIndex<CR>
+autocmd FileType vimwiki set filetype=markdown
+set conceallevel=1
+
+</code></pre>
+
+        <p style="font-size: 18px;">
+	For starters, by default wikis will be created in the same directory. By using  "folder/wiki" you can make your wiki exist in a subfolder, which keeps order.
+	In my example video, my folder looks like this:
+
+<div class="directory-structure">
+    <ul>
+        <li><span class="dir">~/dl/notebooks</span>
+            <ul>
+                <li><span class="file">generate_presentation.sh</span></li>
+                <li><span class="file">index.md</span></li>
+                <li><span class="dir">Newton</span>
+                    <ul>
+                        <li><span class="dir">binonium</span></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+        <p style="font-size: 18px;">
+	By default, the markdown extension isn't used. I feel as though this is a must, markdown is very easy and quick to write in, especially with the "snippets" that I use. I'll explain these in the next section. These snippets are usable in any language when using vimwiki (or vim in general).
+
+        <p style="font-size: 18px;">
+	In my vimrc you can see I defined the ~/dl/notebooks/ directory, which I used for this example. You can pick any directory, and obviously multiple directories.  I bound "leader wi" to this wiki, you can bind any combination to any wiki.
+
+        <p style="font-size: 18px;">
+	For more info, see the official Vimwiki repo. 
+
+	</p>
+        <h2> Markdown </h2>
+        <p style="font-size: 18px;">
+
+	The markdown formatting which I choose to use is great because, the language itself is very easy, and perfect for taking notes. Combined with these snippets, it's perfect. You're able to define modes in there too. The snippets are kept in ~/.vim/UltiSnips/markdown.snippets. I'll give you a general snippet example first:
+
+<pre><code class="language-bash custom-code">
+snippet inf "Nieuwe wiki in nieuwe map" b
+---
+${1:title: "$2"}
+${3:author: "$4"}
+${5:date: "$6"}
+--- 
+$7
+endsnippet
+
+</code></pre>
+<p style="font-size: 18px;">
+	The way this snippet works; when you type "inf" then "tab" it will spawn the entire defined block. The $1 is where it'll spawn your cursor first, $2 is where you'll go after 1 tab, $3 is where you'll go after 2 tabs. In this case, you see how it gives you the ability to easily make your filetags. And you could make this much bigger; for my LaTeX snippets I have one snippet which includes an entire template, from there I just put my $'s on the right place. It's very powerful.
+	<p style="font-size: 18px;">
+	Here's how I defined math mode within my markdown.snippets file, and the vimrc. 
+
+<pre><code class="language-bash custom-code">
+global !p
+def math():
+	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+endglobal
+
+</code></pre>
+
+	<p style="font-size: 18px;">
+	By default, the "tab" didn't work, I had to add these lines to my vimrc.
+<pre><code class="language-bash custom-code">
+autocmd FileType vimwiki UltiSnipsAddFiletypes markdown
+au filetype vimwiki silent! iunmap <buffer> <Tab>
+let g:vim_markdown_math = 1
+
+</code></pre>
+
+	<p style="font-size: 18px;">
+	Here's an example of a snippet only defined in math mode. This snippet will only be activated when in a "math" enviroment, which means within the dollar signs.
+<pre><code class="language-bash custom-code">
+context "math()"
+snippet sum "som" iA
+\sum_{k=$1}^{$2} $3 
+endsnippet
+
+</code></pre>
+	For more info, go to the UltiSnips GitHub page.
+	</p>
+
+        <h2> Pandoc </h2>
+        <p style="font-size: 18px;">
+	Pandoc is a very extensible, amazing program. You can convert document types in ways you never thought were possible. A program everyone should know about.
+	For my purposes here, we will use it to convert our markdown files to presentations.
+	Converting markdown to presentation pdf happens with the following command:
+
+<pre><code class="language-bash custom-code">
+	$ pandoc input.md -t beamer -V theme=theme -V colortheme=colortheme -o output.pdf
+
+</code></pre>
+        <p style="font-size: 18px;">
+	
+	The beamer option is what we use to indicate we want a presentation. After -V theme and colortheme we can pick a theme. An example command that will be run by the script I'll speak about shortly goes as follows:
+<pre><code class="language-bash custom-code">
+	$ pandoc Newton.md -t beamer -V theme=Singapore -V colortheme=albatross -o Newton.pdf
+
+</code></pre>
+        <p style="font-size: 18px;">
+	As you see I always use the Singapore theme and albatross colortheme. All of the availables are on the pandoc website, they're great! You could make your own themes as well, if you so wish.
+
+	</p>
+        <h2> Automating </h2>
+        <p style="font-size: 18px;">
+
+	Lastly, it can all be tied together by writing a script which generates the presentations in an instant.
+	I wrote a script "generate_presentation.sh" and bound this in my vimrc:
+<pre><code class="language-bash custom-code">
+	nnoremap <Leader>pg :silent !/home/dyntif/dl/notebooks/generate_presentation.sh %:p<CR>:silent! redraw! <CR>
+
+</code></pre>
+        <p style="font-size: 18px;">
+This will activate the script with the "leader pg" key combination. It will make it so that you won't be plagued with outputs with the ":silent !.." option. The %p will give the script the name of the file and directory you're working in.
+
+<pre><code class="language-bash custom-code">
+#!/bin/bash
+
+# the %p option in the vimrc should give the path!
+if [ -z "$1" ]; then
+  echo "Error: No file path provided."
+  exit 1
+fi
+
+# Get the full file path
+fullpath=$1
+
+# Extract file name and directory from the full path
+filename=$(basename -- "$fullpath")
+dirname=$(dirname -- "$fullpath")
+basefilename="${filename%.*}"
+
+cd "$dirname" || exit
+
+# Convert Markdown to PDF using Pandoc
+pandoc "$filename" -t beamer -V theme=Singapore -V colortheme=albatross -o "$basefilename.pdf"
+
+# Check if PDF was successfully generated
+if [ -f "$basefilename.pdf" ]; then
+  echo "Presentation generated: $basefilename.pdf"
+  # Opening the file with MuPDF with standard zoom of 350
+  mupdf -r 350 "$basefilename.pdf" &
+else
+  echo "Error generating presentation."
+  exit 2
+fi
+
+</code></pre>
+        <p style="font-size: 18px;">
+
+	As you can see, I use mupdf viewer to show me the presentation. This is a very lightweight and easy to use viewer for powerpoints or other pdfs. Perfect for our task! the -r 350 option creates a standard zoom. using "H" when in the presentation sets it right for your client resolution according to height.
+	
+        <p style="font-size: 18px;">
+	I hope this post is clear and helpful. If there are things left unclear, let me know.
+
+	</p>
+    </div>
+</body>
+</html>

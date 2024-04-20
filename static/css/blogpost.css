@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Basisstijlen die van toepassing zijn op alle apparaten */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0px;
+    margin: 0 auto;
+    max-width: 1200px;
+    justify-content: center; /* Zorgt dat de inhoud altijd gecentreerd is */
+    box-sizing: border-box;
+}
+
+.sidebar, .main-content {
+    padding: 10px;
+    width: 100%; /* Default to full width to ensure it adjusts on all screens */
+}
+
+.blog-container {
+    width: 70%;
+    max-width: 800px; /* Maximale breedte van de container */
+    padding: 25px;
+    background-color: #333; /* Donkere achtergrond */
+    color: white; /* Witte tekst */
+    border-radius: 5px;
+    box-sizing: border-box; /* Zorgt ervoor dat padding en border inbegrepen zijn in de breedte */
+}
+
+.blog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.home-link, .blog-info {
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+.home-link i {
+    margin-right: 5px;
+}
+
+hr {
+    border: none;
+    height: 4px;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.2em; /* Grotere hoofdtitel */
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.5em; /* Kleinere subtitel */
+    color: #d3d3d3; /* Lichtere kleur voor subtitel */
+    margin-bottom: 10px;
+}
+
+/* Media Query voor mobiele apparaten */
+@media (max-width: 768px) {
+    .container, .sidebar, .main-content, .blog-container {
+        width: 100%; /* Container neemt de volledige breedte van het scherm */
+        padding: 10px;
+    }
+
+    h1, h2 {
+        font-size: larger; /* Grotere koppen voor betere zichtbaarheid */
+        text-align: center;
+    }
+    
+    /* Zorg ervoor dat alles gecentreerd blijft */
+    .sidebar, .main-content, .blog-container {
+        align-items: center;
+        text-align: center;
+    }
+}
+pre {
+    background-color: #000615; /* Donkere achtergrondkleur */
+    border-radius: 5px; /* Afgeronde hoeken */
+    padding: 5px; /* Padding rond de tekst */
+    overflow: auto; /* Zorgt voor scrollbars indien nodig */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Schaduweffect */
+}
+
+.code-function {
+    color: #ffc66d; /* Geel voor functienamen */
+}
+
+.directory-structure ul {
+    list-style-type: none;
+    padding-left: 20px; /* Indentatie van de lijst */
+    position: relative;
+}
+
+.directory-structure ul::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #999; /* Verticale lijn voor de gehele lijst */
+}
+
+.directory-structure li {
+    margin: 8px 0;
+    padding-left: 20px; /* Extra ruimte voor de horizontale lijn */
+    position: relative;
+    border-left: 1px solid #333; /* Verticale lijn per item */
+}
+
+.directory-structure li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%; /* Centreren van de horizontale lijn op de hoogte van de tekst */
+    height: 1px;
+    width: 20px;
+    background: #999; /* Horizontale lijn naar de tekst */
+    border-left: none;
+}
+
+.directory-structure li:last-child {
+    border-left: none; /* Geen verticale lijn voor het laatste item */
+}
+
+.directory-structure li:last-child::before {
+    content: none; /* Geen horizontale lijn voor het laatste item */
+}

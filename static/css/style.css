@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #f1f1f1;
+    margin: 0;
+    padding: 0;
+    background-color: #444;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 80%;
+    max-width: 1200px;
+    display: flex;
+    flex-wrap: nowrap;
+    margin-top: 10px; 
+    gap: 10px; 
+}
+
+.sidebar {
+    width: 25%;
+    padding: 20px; /* Verhoogde padding */
+    word-wrap: break-word;
+    margin-left: 20px; /* Meer ruimte aan de linkerkant */
+    margin-top: 20px; /* Meer ruimte bovenaan */
+}
+
+.main-content {
+    width: 75%;
+    padding: 10px; 
+}
+
+h1 {
+    font-size: 1.2em;
+    margin-bottom: 15px; /* Verhoogde marge onder naam */
+}
+
+h2 {
+    color: #d3d3d3;
+}
+
+a, .date {
+    color: #666;
+    font-size: 0.9em;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; 
+}
+
+ul li {
+    margin-bottom: 10px; /* Verhoogde marge tussen links */
+}
+
+article {
+    margin-bottom: 10px; 
+    line-height: 1.2;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: white;
+    padding: 10px; 
+}
+
+i.fab {
+    margin-right: 8px; /* Ruimte tussen icoon en tekst */
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar, .main-content {
+        width: 100%;
+    }
+}
