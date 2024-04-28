@@ -85,3 +85,14 @@ i.fab {
         width: 100%;
     }
 }
+
+
+
+.clickable-article {
+    cursor: pointer;
+}
+
+.clickable-article h2:hover,
+.clickable-article p:hover {
+    text-decoration: underline;
+}
