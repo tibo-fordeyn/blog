@@ -93,8 +93,9 @@ set conceallevel=1
                 <li><span class="file">generate_presentation.sh</span></li>
                 <li><span class="file">index.md</span></li>
                 <li><span class="dir">Newton</span>
-                    <ul>
-                        <li><span class="dir">binonium</span></li>
+                    <ul> 
+                	<li><span class="dir">Newton.md</span>
+			<li><span class="dir">binonium.md</span></li>
                     </ul>
                 </li>
             </ul>
@@ -137,7 +138,7 @@ $1 is the first spawning place, $2 the second, ...
 <p style="font-size: 18px;">
 	In this case, you see how it gives you the ability to easily make your filetags. And you could make this much bigger; for my LaTeX snippets I have one snippet which includes an entire template, from there I just put my $'s on the right place. It's very powerful.
 	<p style="font-size: 18px;">
-	Here's how I defined math mode within my markdown.snippets file, and the vimrc. This makes snippets that only expand when you're in math mode. Make sure to have the vimtex snippets for this.
+	Here's how I defined math mode within my markdown.snippets file, and the vimrc. This makes snippets that only expand when you're in math mode. Make sure to have the vimtex plugin for this.
 
 <pre><code class="language-bash custom-code">
 global !p
@@ -170,7 +171,7 @@ endsnippet
 
         <h2> Pandoc </h2>
         <p style="font-size: 18px;">
-	Pandoc is a very extensible, amazing program. You can convert document types in ways you never thought were possible. A program everyone should know about.
+	Pandoc is a very extensible program.
 	We will use it to convert our markdown files to presentations.
 	Converting a markdown to presentation pdf happens with the following command:
 
@@ -206,7 +207,7 @@ This will activate the script with the "leader pg" key combination. It will make
 
 # the %p option in the vimrc should give the path!
 if [ -z "$1" ]; then
-  echo "Error: No file path provided."
+  echo "Error: No file path provided, check your vimrc definition"
   exit 1
 fi
 
