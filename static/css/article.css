@@ -141,11 +141,40 @@ ul li::before {
     vertical-align: middle; /* Zorg dat het pijltje op dezelfde lijn staat als de tekst */
 }
 
-/* Voor geordende lijsten (ol), behoud de standaard stijl */
+/* Stijlen voor genummerde lijsten (ol) */
 ol {
-    list-style-type: decimal; /* Standaard numerieke stijl */
-    padding-left: 20px;
+    list-style: none; /* Verwijder de standaard nummering */
+    counter-reset: section; /* Zet een counter om de nummers handmatig te stylen */
+    padding-left: 0; /* Verwijder standaard padding */
 }
+
+ol li {
+    counter-increment: section; /* Verhoog de counter voor elk lijstitem */
+    margin-bottom: 15px; /* Voeg wat ruimte toe tussen lijstitems */
+    position: relative; /* Maak het mogelijk om het nummer los te positioneren */
+    padding-left: 50px; /* Zorg voor ruimte tussen de genummerde cirkel en de tekst */
+}
+
+/* Het nummer met cirkel */
+ol li::before {
+    content: counter(section); /* Voeg het nummer toe op basis van de counter */
+    background-color: rgba(22, 61, 87, 0.2); /* Gebruik dezelfde subtiele lichtblauwe kleur */
+    color: rgba(255, 255, 255, 0.8); /* Lichte tekstkleur voor contrast */
+    border: 2px solid rgba(22, 61, 87, 0.6); /* Dunne, duidelijk omlijnde rand */
+    font-size: 18px; /* Maak de nummers iets groter voor duidelijkheid */
+    font-weight: bold; /* Maak de nummers vetgedrukt */
+    border-radius: 50%; /* Maak de kaders rond (cirkelvormig) */
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute; /* Positioneer het nummer links van het lijstitem */
+    left: 0; /* Plaats het nummer aan de linkerkant */
+    top: 0;
+}
+
+
 
 /* Algemeen lijst item gedrag */
 ul li, ol li {
