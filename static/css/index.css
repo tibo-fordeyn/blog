@@ -1,0 +1,90 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #0D1B2A; /* Donkerblauwe achtergrond voor de hele pagina */
+    color: white;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto; /* Centreert de container op de pagina */
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #0D1B2A;
+}
+
+.sidebar {
+    background-color: #1B263B;
+    width: 450px; /* Absolute breedte voor sidebar */
+    padding: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.article {
+    background-color: #1B263B;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.article:hover {
+    transform: translateY(-5px);
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    background-color: #2C3E50;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+a:hover {
+    background-color: #34495E;
+}
+
+.sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100%; /* Container neemt volledige breedte in */
+        flex-direction: column;
+        align-items: center;
+        padding: 10px; /* Kleine padding rondom de container voor consistentie */
+    }
+    .sidebar {
+        margin-bottom: 10px; /* Klein beetje ruimte tussen de sidebar en de main content */
+    }
+    .sidebar, .main-content, .article {
+        box-shadow: none; /* Optioneel: verwijder de schaduwen voor een vlakkere look */
+    }
+}
+
