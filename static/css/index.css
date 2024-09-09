@@ -1,3 +1,4 @@
+/* Algemene stijlen voor grote schermen (desktop) */
 html, body {
     height: 100%;
     margin: 0;
@@ -5,6 +6,7 @@ html, body {
     background-color: #0D1B2A; /* Donkerblauwe achtergrond voor de hele pagina */
     color: white;
     font-family: 'Roboto', sans-serif;
+    overflow-x: hidden; /* Verberg horizontaal scrollen */
 }
 
 .container {
@@ -16,6 +18,7 @@ html, body {
     align-items: flex-start;
     padding: 20px;
     background-color: #0D1B2A;
+    box-sizing: border-box;
 }
 
 .sidebar {
@@ -73,18 +76,33 @@ a:hover {
     margin-bottom: 10px;
 }
 
+/* Stijlen voor kleine schermen (mobiel) */
 @media (max-width: 768px) {
     .container {
         width: 100%; /* Container neemt volledige breedte in */
-        flex-direction: column;
+        flex-direction: column; /* Zet de items onder elkaar op mobiel */
         align-items: center;
-        padding: 10px; /* Kleine padding rondom de container voor consistentie */
+        padding: 10px; /* Kleinere padding rondom de container */
     }
     .sidebar {
-        margin-bottom: 10px; /* Klein beetje ruimte tussen de sidebar en de main content */
+        width: 100%; /* Sidebar neemt de volledige breedte in op mobiel */
+        margin-bottom: 10px; /* Voeg ruimte toe tussen de sidebar en de main content */
+        box-shadow: none; /* Optioneel: verwijder schaduwen voor een vlakkere look */
     }
-    .sidebar, .main-content, .article {
-        box-shadow: none; /* Optioneel: verwijder de schaduwen voor een vlakkere look */
+    .main-content {
+        width: 100%; /* Hoofdinhoud neemt volledige breedte in op mobiel */
+    }
+    .article {
+        width: 100%; /* Artikelen nemen volledige breedte in op mobiel */
+        padding: 15px; /* Iets kleinere padding om ruimte te besparen op kleine schermen */
+    }
+
+    img.profile-photo {
+        width: 80px; /* Kleinere profielfoto op mobiel */
+        height: 80px;
+    }
+
+    h3 {
+        font-size: 1.2em; /* Iets kleinere koptekst voor mobiel */
     }
 }
-
