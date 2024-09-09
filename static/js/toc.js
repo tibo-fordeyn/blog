@@ -4,28 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var firstHeader = headers[0]; // Pak de eerste header op de pagina
     var isSticky = false; // Houd bij wanneer de TOC sticky wordt
 
-    // Functie om te controleren of de schermbreedte kleiner is dan 768px
-    function isSmallScreen() {
-        return window.innerWidth < 768;
-    }
-
-    // Verberg of toon de TOC op basis van schermgrootte
-    function toggleTocVisibility() {
-        if (isSmallScreen()) {
-            toc.style.display = 'none'; // Verberg TOC op kleine schermen
-        } else {
-            toc.style.display = 'block'; // Toon TOC op grotere schermen
-        }
-    }
-
-    // Voer deze functie uit om de zichtbaarheid van de TOC te controleren bij laden van de pagina
-    toggleTocVisibility();
-
-    // Voeg event listener toe voor schermgrootte wijzigingen
-    window.addEventListener('resize', function() {
-        toggleTocVisibility(); // Controleer de schermgrootte en pas de TOC-zichtbaarheid aan
-    });
-
     // Verwijder eerst eventuele dubbele "Contents:" (reset de inhoud van de TOC)
     toc.innerHTML = '';
 
@@ -39,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
     tocTitle.style.paddingBottom = '5px';
     tocTitle.style.display = 'inline-block'; // Voorkom dat de onderlijning over de hele breedte gaat
     toc.appendChild(tocTitle); // Voeg het toe aan het begin van de TOC-container
+
+    // TOC laten zien bij laden van de pagina
+    toc.style.display = 'block';
 
     // Voeg TOC-inhoud toe op basis van de headers
     headers.forEach(function(header) {
@@ -57,14 +38,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Functie om de TOC sticky te maken zodra we voorbij de eerste header scrollen
     function updateTocPosition() {
-        if (isSmallScreen()) return; // Geen sticky TOC op kleine schermen
-
         var firstHeaderTop = firstHeader.getBoundingClientRect().top + window.scrollY; // Bepaal de top van de eerste header
         var tocHeight = toc.offsetHeight; // Hoogte van de TOC
         var scrollPosition = window.scrollY;
         var windowHeight = window.innerHeight;
         var maxTocTop = windowHeight * 0.7; // Maximaal 70% van de hoogte van het scherm
 
+        // Zorg ervoor dat de TOC soepel verspringt naar sticky wanneer de gebruiker voorbij de eerste header scrolt
         if (scrollPosition < firstHeaderTop - 100) {
             toc.style.position = 'absolute';
             toc.style.top = firstHeader.offsetTop + 'px'; // Plaats de TOC bij de eerste header
@@ -78,8 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Functie om te bepalen welke header actief moet zijn
     function updateActiveSection() {
-        if (isSmallScreen()) return; // Geen actieve sectie op kleine schermen
-
         var scrollPosition = window.scrollY + window.innerHeight / 2; // Scrollpositie plus de helft van het venster
         var activeHeader = null;
 
@@ -104,21 +82,36 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Functie om te controleren of de zoom groter is dan 120%
+    function checkZoomLevel() {
+        // Bepaal het zoomniveau via window.devicePixelRatio
+        var zoomLevel = window.devicePixelRatio * 100;
+
+        // TOC verbergen bij zoomniveaus van 120% of meer
+        if (zoomLevel > 140) {
+            toc.style.display = 'none';
+        } else {
+            toc.style.display = 'block';
+        }
+    }
+
     // Event listener voor scrollen met debounce alleen voor de TOC positie
     window.addEventListener('scroll', function() {
         updateTocPosition(); // Dit mag nog steeds met een minimale vertraging
-        updateActiveSection(); // Directe update zonder debounce voor actieve sectie highlight
+
+        // Directe update zonder debounce voor actieve sectie highlight
+        updateActiveSection();
     });
 
     // Event listener voor zoom of venstergrootte veranderingen
     window.addEventListener('resize', function() {
-        toggleTocVisibility();
+        checkZoomLevel();
         updateTocPosition();
         updateActiveSection();
     });
 
     // Initiele update van de actieve sectie en zoom
-    toggleTocVisibility();
+    checkZoomLevel();
     updateTocPosition();
     updateActiveSection();
 });
