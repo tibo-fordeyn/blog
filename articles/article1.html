@@ -28,10 +28,13 @@
 	    </em>
         </p>
         <p>
-	<video autoplay loop>
-    <source src="/static/videos/my-blogpost-demo.mp4" type="video/mp4">
-    Your browser does not support this video tag.
+
+	<video class="big-video" autoplay loop muted playsinline preload="metadata">
+		<source src="/static/videos/my-blogpost-demo-optimized.mp4" type="video/mp4" media="(min-width: 601px)">
+		<source src="/static/videos/my-blogpost-demo-mobile.mp4" type="video/mp4" media="(max-width: 600px)">
+    		Your browser does not support this video tag.
 	</video>
+
 
 	In practice, you write your notes in Vimwiki, incorporating the markdown extension - and snippets. Then with some keybinds you can easily turn them into a presentation instantly.
         </p>
@@ -184,7 +187,7 @@ $ pandoc Newton.md -t beamer -V theme=Singapore -V colortheme=albatross -o Newto
         </p>
         <h2 id="automating">Automating</h2>
         <p>
-            Lastly, it can all be tied together by writing a simple script which generates the presentations in an instant.
+            At last, it can all be tied together by writing a simple script which generates the presentations in an instant.
             <pre><code class="language-bash custom-code">
 #!/bin/bash
 
