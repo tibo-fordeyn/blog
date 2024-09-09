@@ -95,7 +95,6 @@ h3 {
     text-align: left;
 }
 
-
 hr {
     display: none;
 }
@@ -104,16 +103,41 @@ hr {
     .blog-container {
         padding: 15px;
     }
-
-    .home-link, h1, p, h2 {
+    .home-link, h1, p, h2, h3 {
         padding: 0 15px;
     }
-
     video {
         width: 100%;
         margin: 10px 0;
     }
+    h1 {
+        font-size: 30px; /* Verklein de titel op kleinere schermen */
+    }
+    h2 {
+        font-size: 22px; /* Verklein h2 op kleinere schermen */
+    }
+    h3 {
+        font-size: 18px; /* Verklein h3 op kleinere schermen */
+    }
+    body, html {
+        font-size: 18px; /* Verklein de algemene tekstgrootte voor betere leesbaarheid */
+    }
+    .blog-header {
+        padding: 10px;
+        font-size: 12px; /* Verklein de tekst in de header */
+    }
+    .blog-info, .home-link {
+        font-size: 12px; /* Kleinere tekst voor de blog-info en home link */
+    }
+    p {
+        font-size: 16px; /* Verklein de paragraaf tekst voor een betere leesbaarheid */
+        line-height: 1.5;
+    }
+    #toc {
+        display: none; /* Verberg de inhoudstafel op kleine schermen */
+    }
 }
+
 
 /*LIJSTEN*/
 /* Algemene stijl voor onderlijnde tekst */
