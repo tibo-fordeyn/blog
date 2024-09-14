@@ -82,13 +82,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Functie om te controleren of de zoom groter is dan 120%
-    function checkZoomLevel() {
+    // Functie om te controleren of de TOC zichtbaar moet zijn op basis van zoomniveau en vensterbreedte
+    function checkVisibility() {
         // Bepaal het zoomniveau via window.devicePixelRatio
         var zoomLevel = window.devicePixelRatio * 100;
 
-        // TOC verbergen bij zoomniveaus van 120% of meer
-        if (zoomLevel > 140) {
+        // Haal de vensterbreedte op
+        var windowWidth = window.innerWidth;
+
+        // TOC verbergen bij zoomniveaus van 140% of meer of bij vensterbreedtes kleiner dan 1000px
+        if (zoomLevel > 140 || windowWidth < 1000) {
             toc.style.display = 'none';
         } else {
             toc.style.display = 'block';
@@ -101,17 +104,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Directe update zonder debounce voor actieve sectie highlight
         updateActiveSection();
+
+        // Controleer de zichtbaarheid bij scrollen
+        checkVisibility();
     });
 
     // Event listener voor zoom of venstergrootte veranderingen
     window.addEventListener('resize', function() {
-        checkZoomLevel();
+        checkVisibility();
         updateTocPosition();
         updateActiveSection();
     });
 
-    // Initiele update van de actieve sectie en zoom
-    checkZoomLevel();
+    // Initiële update van de actieve sectie en zichtbaarheid
+    checkVisibility();
     updateTocPosition();
     updateActiveSection();
 });
