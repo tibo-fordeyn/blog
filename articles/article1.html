@@ -15,7 +15,7 @@
     <div class="blog-container">
         <div class="blog-header">
             <a href="/" class="home-link"><i class="fas fa-arrow-left"></i> Home Page</a>
-            <span class="blog-info">12 april 2024 | 5 min read</span>
+            <span class="blog-info">12 april 2024 | 10 min read</span>
         </div>
         <hr>
         <h1>Utilising Vimwiki - Markdown - Pandoc to instantly generate presentations from notes</h1>
@@ -40,7 +40,19 @@
         <h2 id="vimwiki">Vimwiki</h2>
 	<p>
     Vimwiki is a tool used for keeping personal notes. <span class="underl">It's essentially just writing a file in vim, but with extra functionality</span> which allows you to create file hierarchies and navigate through these hierarchies quickly.
+    Let's first install Vimwiki by adding the plugin to your <span class="highl">vimrc</span>, assuming you're using vim-plug;
+    <pre><code class="language-vim">
+call plug#begin('~/.vim/plugged')
+...
+Plug 'vimwiki/vimwiki'
+...
+call plug#end()
+    </code></pre>
+    <p> 
+    If you're new to using vim-plug, find all of your information on <a href="https://github.com/junegunn/vim-plug" target="_blank">their GitHub page</a>.
     Here are the only Vimwiki keybinds you need to familiarise with for using it:
+    	 
+    </p>
 </p>
 <ul>
     <li><span class="marked-text">Enter on word</span> -- creates a wiki on this word</li>
@@ -53,7 +65,7 @@
 You can see how this could be very useful for going deep into a subject. However, there are some things that I consider indispensable for really using it. Here is the config code in my <span class="highl">vimrc</span>, which I will explain in what follows.
 </p>
 
-            <pre><code class="language-bash">
+            <pre><code class="language-vim">
 let g:vimwiki_list = [
     {
         'path': '~/dl/notebooks/',
@@ -70,13 +82,17 @@ let g:vimwiki_list = [
     }
 ]
 map <leader>wi :VimwikiIndex<CR>
-autocmd FileType vimwiki set filetype=markdown
 set conceallevel=1
             </code></pre>
         </p>
+	<p> 
+           You can see I defined the <span class="highl">~/dl/notebooks</span> directory as a starting directory. It's bound to <span class="highl">leader wi</span>. You can pick any directory, and obviously multiple directories, to configure accordingly. The default filetype is set to markdown here.  The <span class="highl">set conceallevel=1</span> will make your markdown files easier to look at; it will conceal ugly syntax. 
+	</p>
         <p>
-            For starters, by default wikis will be created in the same directory. By using <span class="highl">folder/wikiname</span> on words you enter, your wiki will exist in a subfolder. This keeps order. In my example video, my folder looks like this:
-
+	If you're not very familiar with what this all means, I'll refer you to <a href="https://vimdoc.sourceforge.net/htmldoc/options.html" target="_blank">the vim documentation</a>. Don't get intimidated! It's very simple.
+        </p>
+        <p>
+            I should mention that by default wikis will be created in the same directory. By using <span class="highl">folder/wikiname</span> on words you enter, your wiki will exist in a subfolder. This keeps order. In my example video, my folder looks like this:
 	    <div class="directory-structure">
     <ul>
         <li class="dir">~/dl/notebooks
@@ -96,17 +112,50 @@ set conceallevel=1
 
         </p>
         <p>
-           In my config you can see I defined the <span class="highl">~/dl/notebooks</span> directory, which I used for this example. You can pick any directory, and obviously multiple directories. I bound <span class="highl">leader wi</span> to this wiki. 
-		The default filetype is set to markdown. 
-        </p>
-        <p>
-	If you're new to vim, you can use my full config file on my GitHub. Learn to use it -- which is very easy -- before setting this up. For more info, see <a href="https://github.com/vimwiki/vimwiki" target="_blank">the official Vimwiki repo</a>.
+	If you're new to vim, you can also use my full config file on my GitHub. Learn to use it before setting this up. For more info, see <a href="https://github.com/vimwiki/vimwiki" target="_blank">the official Vimwiki GitHub</a>.
         </p>
         <h2 id="markdown">Markdown</h2>
 	<h3 id="snippets">Snippets</h3>
         <p>
-            To make markdown lightning fast, snippets are used. The snippets are kept in <span class="highl">~/.vim/UltiSnips/markdown.snippets</span>. 
+            To make markdown lightning fast, snippets are used. Before discussing how they work, I'll show you how to configure them. We need the following plugins now:
+    <pre><code class="language-vim">
+call plug#begin('~/.vim/plugged')
+...
+Plug 'vimwiki/vimwiki' " plugin we already discussed
+Plug 'SirVer/ultisnips' 
+Plug 'honza/vim-snippets'
+Plug 'lervag/vimtex' 
+Plug 'godlygeek/tabular'
+Plug 'preservim/vim-markdown' 
+...
+call plug#end()
+    </code></pre>
+    <p> 
+    	Where ultisnips is the snippet-engine. It makes everything work. Vim-snippets is a set of snippets, so you don't have to make all of them yourself. Vimtex is used for LaTeX compiling with vim and more, but we will use it for our math-mode compilation. Lastly tabular and vim-markdown are just used so that markdown features will be naturally integrated.
+    </p>
+    <p> 
+    	These are the configurations to go along with the snippet-engine;
+	<pre><code class="language-vim">
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsSnippetDirectories=["UltiSnips","Snippets"]
+let g:UltiSnipsEditSplit="vertical"
+	</code></pre>
+    </p>
+<p> 
+	    The snippets are kept in <span class="highl">~/.vim/UltiSnips/markdown.snippets</span>.
+        <p>
+            By default, the <span class="highl">tab</span> trigger will not work for markdown. Add the following lines to your vimrc to fix this;
+            <pre><code class="language-vim custom-code">
+autocmd FileType vimwiki UltiSnipsAddFiletypes markdown
+au filetype vimwiki silent! iunmap <buffer> <Tab>
+autocmd FileType vimwiki set filetype=markdown
+            </code></pre>
+        </p>
+	<p> 
 	    Here's a snippet example that was used in the demo-vieo:
+	</p>
             <pre><code class="language-bash custom-code">
 snippet inf "Info for new wiki" b
 ---
@@ -125,7 +174,7 @@ endsnippet
 	    <p> 
     To start a definition, the syntax goes 
     <pre><code class="language-bash">
-    	snippet word "discription of snippet" behaviour
+snippet word "discription of snippet" behaviour
     </code></pre>
 	    <p> 
     	where "snippet" is standard syntax. The "word" is what will expand when typed. Behaviour will determine how it will expand. There's three important options to know when it comes to behaviour; 
@@ -143,7 +192,7 @@ endsnippet
         </p>
 	<h3 id="Math mode">Math mode</h3>
         <p>
-            Here's how I defined math mode within my markdown.snippets file, and the vimrc. This makes snippets that only expand when you're in math mode. Make sure to have the vimtex plugin for this.
+            Let's now discuss how I defined math mode within my markdown.snippets file, and the vimrc. This makes snippets that only expand when you're writing mathematics. Make sure to have the vimtex plugin for this. Write the following code at the top of your <span class="highl">~/.vim/UltiSnips/markdown.snippets</span> file.
             <pre><code class="language-bash custom-code">
 global !p
 def math():
@@ -151,16 +200,35 @@ def math():
 endglobal
             </code></pre>
         </p>
-        <p>
-            By default the <span class="highl">tab</span> trigger didn't work. I added the following lines to my vimrc.
-            <pre><code class="language-bash custom-code">
-autocmd FileType vimwiki UltiSnipsAddFiletypes markdown
-au filetype vimwiki silent! iunmap <buffer> <Tab>
+	<p> 
+		Then add the following line to your <span class="highl">vimrc</span>:
+		<pre><code class="language-vim">
 let g:vim_markdown_math = 1
-            </code></pre>
-        </p>
+		</code></pre>
+	</p>
+	<p> 
+		To go into math mode, we use <span class="highl">dm</span> and <span class="highl">mk</span>, which I use because of <a href="https://castel.dev/post/lecture-notes-1/" target="_blank">Gilles Castel</a> his amazinig blog post. Define them accordingly in your <span class="highl">markdown.snippets</span> file;
+		<pre><code class="language-vim">
+snippet dm "Display Math Mode" iA
+\$\$
+${1:math}
+\$\$$0
+endsnippet
+		</code></pre>
+	</p>
+	<p> 
+	this "display math" snippet will be used for mathematics that is on a new line. As apposed to; 
+		<pre><code class="language-bash">
+snippet mk "Inline Math Mode" iA 
+\$${1:math}\$$0
+endsnippet
+		</code></pre>
+	</p>
+	<p> 
+		which is used for inline mathematics. 
+	</p>
         <p>
-            Here's a snippet -- also used in the demo -- that is only defined in math mode. This snippet will only be activated when in a "math" environment, which means within the <span class="highl">$</span> signs.
+            Here's a snippet -- also used in the demo -- that is only defined in math mode. <span class="underl">This snippet will only be activated when in a "math" environment</span>, which means within the <span class="highl">$</span> signs.
             <pre><code class="language-bash custom-code">
 context "math()"
 snippet sum "som" iA
@@ -168,6 +236,9 @@ snippet sum "som" iA
 endsnippet
             </code></pre>
         </p>
+	<p> 
+		If you are in need of more info on snippets, or if you want a plethora of math mode snippets, I'll direct you to <a href="https://castel.dev/post/lecture-notes-1/" target="_blank">Gilles Castel's blog post on the matter</a> and <a href="https://github.com/gillescastel/latex-snippets" target="_blank">his snippets</a> respectively. Those are more clever than what I could come up with. 
+	</p>
         <h2 id="pandoc">Pandoc</h2>
         <p>
             Pandoc is a very extensible program. We will use it to convert our markdown files to presentations. Converting markdown to presentation PDF happens with the following <span class="underl">general</span> command:
@@ -182,7 +253,7 @@ $ pandoc Newton.md -t beamer -V theme=Singapore -V colortheme=albatross -o Newto
             </code></pre>
         </p>
         <p>
-            As you see I always use the Singapore theme and albatross colortheme. All of the availables are on the pandoc website, they're great! You could make your own themes as well. It's possible to take this quite far.
+            As you see I always use the Singapore theme and albatross colortheme. All of the availables are on <a href="https://hartwork.org/beamer-theme-matrix/" target="_blank">this cool website</a>, they're great! You could make your own themes as well. Try not to take it too far!
         </p>
         <h2 id="automating">Automating</h2>
         <p>

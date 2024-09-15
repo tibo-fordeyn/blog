@@ -58,13 +58,14 @@ body, html {
 
 h1 {
     font-size: 38px;
-    width: 70%; /* Smaller width for title */
+    width: 70%; /* Herstelde breedte voor de titel */
     margin: 0 auto 25px auto;
     text-align: center;
+    padding: 0 20px; /* Extra padding voor de titel */
 }
 
 video {
-    width: calc(130% + 40px);
+    width: calc(130% + 40px); /* Herstelde bredere video */
     margin: 20px -136.5px;
 }
 
@@ -84,7 +85,7 @@ h2 {
     font-size: 26px;
     color: #EAECEE;
     margin-top: 30px;
-    padding: 10 20px;
+    padding: 0 20px;
     text-align: left;
 } 
 h3 {
@@ -99,118 +100,186 @@ hr {
     display: none;
 }
 
-@media (max-width: 1000px) {
-    .blog-container {
-        padding: 15px;
-    }
-    .home-link, h1, p, h2, h3 {
-        padding: 0 15px;
-    }
-    video {
-        width: 100%;
-        margin: 10px 0;
+/* Responsieve styling voor verschillende schermgroottes */
+@media (max-width: 1200px) {
+    body, html {
+        font-size: 19px;
     }
     h1 {
-        font-size: 30px; /* Verklein de titel op kleinere schermen */
+        font-size: 34px;
     }
     h2 {
-        font-size: 22px; /* Verklein h2 op kleinere schermen */
+        font-size: 24px;
     }
     h3 {
-        font-size: 18px; /* Verklein h3 op kleinere schermen */
-    }
-    body, html {
-        font-size: 18px; /* Verklein de algemene tekstgrootte voor betere leesbaarheid */
-    }
-    .blog-header {
-        padding: 10px;
-        font-size: 12px; /* Verklein de tekst in de header */
-    }
-    .blog-info, .home-link {
-        font-size: 12px; /* Kleinere tekst voor de blog-info en home link */
-    }
-    p {
-        font-size: 16px; /* Verklein de paragraaf tekst voor een betere leesbaarheid */
-        line-height: 1.5;
-    }
-    #toc {
-        display: none; /* Verberg de inhoudstafel op kleine schermen */
+        font-size: 20px;
     }
 }
 
+@media (max-width: 992px) {
+    .blog-container {
+        padding: 15px;
+    }
+    h1, p, h2, h3 {
+        padding: 0 15px;
+    }
+    body, html {
+        font-size: 18px;
+    }
+    h1 {
+        font-size: 32px;
+    }
+    h2 {
+        font-size: 22px;
+    }
+    h3 {
+        font-size: 18px;
+    }
+    .blog-header {
+        padding: 10px;
+    }
+    .blog-info, .home-link {
+        font-size: 13px;
+    }
+    p {
+        font-size: 17px;
+    }
+}
+
+@media (max-width: 768px) {
+    body, html {
+        font-size: 16px;
+    }
+    h1 {
+        font-size: 28px;
+    }
+    h2 {
+        font-size: 20px;
+    }
+    h3 {
+        font-size: 16px;
+    }
+    .blog-header {
+        flex-direction: column; /* Stapel items onder elkaar */
+        align-items: flex-start;
+    }
+    .home-link {
+        margin-bottom: 10px; /* Ruimte tussen de link en de datum */
+    }
+    .blog-info, .home-link {
+        font-size: 12px;
+    }
+    p {
+        font-size: 15px;
+    }
+    video {
+        width: 100%; /* Video past zich aan aan schermbreedte */
+        margin: 20px 0;
+    }
+}
+
+@media (max-width: 576px) {
+    body, html {
+        font-size: 14px;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    h2 {
+        font-size: 18px;
+    }
+    h3 {
+        font-size: 14px;
+    }
+    p {
+        font-size: 14px;
+    }
+    .blog-info, .home-link {
+        font-size: 11px;
+    }
+    #toc {
+        display: none; /* Verberg de inhoudsopgave op zeer kleine schermen */
+    }
+}
 
 /*LIJSTEN*/
 /* Algemene stijl voor onderlijnde tekst */
 .underl {
-    text-decoration-line: underline;
-    text-decoration-style: dotted;
-    text-decoration-color: rgba(255, 255, 255, 0.6); /* Meer zichtbare, iets wittere lijn */
-    text-decoration-thickness: 1px; /* Dunne lijn */
-    text-underline-offset: 2px;
-    display: inline; /* Zorg ervoor dat de onderlijn alleen onder specifieke woorden komt */
+    border: 1px solid #1ef5fe; /* Donkerblauwe kleur van de codeblok achtergrond */
+    color: inherit;
+    padding: 2px 4px;
+    border-radius: 4px;
+    display: inline;
+    text-decoration: none; /* Geen onderlijning */
 }
 
 /* Specifieke stijl voor ongenummerde lijsten (ul) */
 ul {
-    list-style-type: none; /* Verwijder standaard lijststijl (bullets) */
-    padding-left: 20px; /* Voeg ruimte toe voor het pijltje */
+    list-style-type: none;
+    padding-left: 20px;
 }
 
-/* Gebruik van een pseudo-element om het pijltje toe te voegen */
 ul li::before {
-    content: "➤"; /* Pijltje toevoegen als symbool */
-    color: rgba(255, 255, 255, 0.6); /* Kleur van het pijltje in hetzelfde wit als de onderlijning */
-    margin-right: 10px; /* Ruimte tussen het pijltje en de tekst */
-    font-size: 0.9em; /* Kleinere pijltjes zodat ze subtiel zijn */
-    vertical-align: middle; /* Zorg dat het pijltje op dezelfde lijn staat als de tekst */
+    content: "➤";
+    color: rgba(255, 255, 255, 0.6);
+    margin-right: 10px;
+    font-size: 0.9em;
+    vertical-align: middle;
 }
 
 /* Stijlen voor genummerde lijsten (ol) */
 ol {
-    list-style: none; /* Verwijder de standaard nummering */
-    counter-reset: section; /* Zet een counter om de nummers handmatig te stylen */
-    padding-left: 0; /* Verwijder standaard padding */
+    list-style: none;
+    counter-reset: section;
+    padding-left: 0;
 }
 
 ol li {
-    counter-increment: section; /* Verhoog de counter voor elk lijstitem */
-    margin-bottom: 15px; /* Voeg wat ruimte toe tussen lijstitems */
-    position: relative; /* Maak het mogelijk om het nummer los te positioneren */
-    padding-left: 50px; /* Zorg voor ruimte tussen de genummerde cirkel en de tekst */
+    counter-increment: section;
+    margin-bottom: 15px;
+    position: relative;
+    padding-left: 50px;
 }
 
-/* Het nummer met cirkel */
 ol li::before {
-    content: counter(section); /* Voeg het nummer toe op basis van de counter */
-    background-color: rgba(22, 61, 87, 0.2); /* Gebruik dezelfde subtiele lichtblauwe kleur */
-    color: rgba(255, 255, 255, 0.8); /* Lichte tekstkleur voor contrast */
-    border: 2px solid rgba(22, 61, 87, 0.6); /* Dunne, duidelijk omlijnde rand */
-    font-size: 18px; /* Maak de nummers iets groter voor duidelijkheid */
-    font-weight: bold; /* Maak de nummers vetgedrukt */
-    border-radius: 50%; /* Maak de kaders rond (cirkelvormig) */
+    content: counter(section);
+    background-color: rgba(22, 61, 87, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(22, 61, 87, 0.6);
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50%;
     width: 30px;
     height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute; /* Positioneer het nummer links van het lijstitem */
-    left: 0; /* Plaats het nummer aan de linkerkant */
+    position: absolute;
+    left: 0;
     top: 0;
 }
 
-
-
-/* Algemeen lijst item gedrag */
-ul li, ol li {
-    line-height: 1.4; /* Behoud normale lijnhoogte */
-    font-family: inherit; /* Gebruik het standaard lettertype */
-    margin-bottom: 8px; /* Voeg wat ruimte toe tussen lijstitems */
+/* Aanpassingen voor genummerde lijsten op kleine schermen */
+@media (max-width: 576px) {
+    ol li {
+        padding-left: 40px;
+    }
+    ol li::before {
+        width: 25px;
+        height: 25px;
+        font-size: 16px;
+    }
 }
 
-
+/* Algemeen lijstitem gedrag */
+ul li, ol li {
+    line-height: 1.4;
+    font-family: inherit;
+    margin-bottom: 8px;
+}
 
 .marked-text {
-    background-color: #163d57; /* Lichter dan de donkere achtergrond maar nog steeds subtiel */
+    background-color: #163d57;
     color: white;
     padding: 2px 4px;
     border-radius: 3px;
@@ -219,53 +288,38 @@ ul li, ol li {
 }
 
 .highl {
-    background-color: rgba(22, 61, 87, 0.2); /* Lichte blauwgrijze tint met 20% doorzichtigheid */
-    color: #b0c4de; /* Lichtblauwe tekstkleur voor subtiele leesbaarheid */
+    background-color: rgba(22, 61, 87, 0.2);
+    color: #b0c4de;
     padding: 2px 4px;
     border-radius: 3px;
     font-family: monospace;
-    display: inline; /* Zorg ervoor dat de markering alleen rond specifieke woorden komt */
-}
-
-.underl {
-    text-decoration-line: underline; /* Zorg ervoor dat er een onderlijning is */
-    text-decoration-style: dotted; /* Maak de onderlijn gestippeld (dotted) */
-    text-decoration-color: rgba(255, 255, 255, 0.6); /* Meer zichtbare, iets wittere lijn */
-    text-decoration-thickness: 1px; /* Dunne lijn */
-    text-underline-offset: 2px; /* Zorg ervoor dat de lijn niet te dicht op de tekst komt */
-    display: inline; /* Zorg ervoor dat de onderlijn alleen onder specifieke woorden komt */
+    display: inline;
 }
 
 a {
-    text-decoration: underline dotted; /* Gebroken (gestippelde) onderlijn */
-    text-decoration-color: rgba(255, 255, 255, 0.6); /* Lichtwitte lijn, zoals bij onderlijnde tekst */
-    text-decoration-thickness: 1px; /* Dunne onderlijn */
-    text-underline-offset: 2px; /* Zorg ervoor dat de onderlijn iets van de tekst af staat */
-    color: inherit; /* Gebruik dezelfde tekstkleur als de omringende tekst */
-    font-weight: normal; /* Normale tekstgewicht zodat het niet te veel opvalt */
-    transition: text-decoration-color 0.3s ease; /* Zorgt voor een subtiele overgang bij hover */
+    color: #163d57 !important; /* Zelfde kleur als de border van .underl */
+    text-decoration: none; /* Geen onderlijning */
+    font-style: italic; /* Licht cursief */
+    transition: color 0.3s ease;
 }
 a:hover {
-    text-decoration-color: rgba(255, 255, 255, 1); /* Maak de onderlijn iets duidelijker bij hover */
+    color: #FFFFFF; /* Tekst wordt wit bij hover */
 }
-
-
-
-
 
 
 /*CODE KADERS EN SYNTAX HIGHLIGHTS*/
 pre {
     background-color: #163d57 !important;
     color: #e1f5fe !important;
-    padding: 0px 20px !important;
+    padding: 10px 20px !important;
     border: none !important;
-    border-radius: 0 !important;
+    border-radius: 5px !important;
     font-size: 16px !important;
-    line-height: 0.8 !important;
+    line-height: 1.4 !important;
     overflow: auto !important;
-    white-space: nowrap !important;
-    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.2); /* Subtiele schaduw toevoegen */
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 code {
@@ -275,23 +329,30 @@ code {
     font-family: 'FiraCodeNerdFont', monospace !important;
 }
 
+/* Aanpassingen voor codeblokken op kleine schermen */
+@media (max-width: 576px) {
+    pre {
+        font-size: 14px !important;
+        padding: 8px 15px !important;
+    }
+}
 
 /* CODE VOOR DIRECTORY STRUCTUUR*/
 .directory-structure {
-    font-family: 'Courier New', monospace; /* Geeft een typische code-achtige look */
+    font-family: 'Courier New', monospace;
     line-height: 1.6;
     margin-left: 20px;
 }
 
 .directory-structure ul {
-    padding-left: 20px; /* Zorgt voor een inkeping bij geneste lijsten */
+    padding-left: 20px;
     position: relative;
 }
 
 .directory-structure li {
     margin: 5px 0;
     position: relative;
-    padding-left: 20px; /* Ruimte voor lijnen en icoontjes */
+    padding-left: 20px;
 }
 
 .directory-structure li::before {
@@ -301,7 +362,7 @@ code {
     left: 0;
     bottom: 0;
     width: 1px;
-    background: #888; /* Kleur van de verticale lijn */
+    background: #888;
 }
 
 .directory-structure li::after {
@@ -311,7 +372,7 @@ code {
     left: 0;
     width: 20px;
     height: 1px;
-    background: #888; /* Kleur van de horizontale lijn */
+    background: #888;
 }
 
 .directory-structure li:last-child::before {
@@ -321,32 +382,45 @@ code {
 /* Icoonstijlen */
 .directory-structure .dir:before,
 .directory-structure .file:before {
-    content: '\f07c'; /* FontAwesome map icoon */
+    content: '\f07c';
     font-family: FontAwesome;
     position: absolute;
     left: -25px;
     top: -2px;
-    color: #007BFF; /* Blauwe kleur voor mappen */
+    color: #007BFF;
 }
 
 .directory-structure .file:before {
-    content: '\f15b'; /* FontAwesome bestand icoon */
-    color: #555; /* Grijze kleur voor bestanden */
+    content: '\f15b';
+    color: #555;
+}
+
+/* Aanpassingen voor directory structuur op kleine schermen */
+@media (max-width: 576px) {
+    .directory-structure {
+        margin-left: 10px;
+    }
+    .directory-structure li {
+        padding-left: 15px;
+    }
+    .directory-structure li::after {
+        width: 15px;
+    }
 }
 
 /* INHOUDSOPGAVE CSS */
 #toc {
-    position: sticky; /* Houd de TOC sticky zodra we voorbij de header zijn */
-    top: 100px; /* Startpositie vanaf de bovenkant */
-    max-height: 70vh; /* Maximale hoogte is 70% van de viewport */
-    overflow-y: auto; /* Scrollbaar maken indien nodig */
+    position: sticky;
+    top: 100px;
+    max-height: 70vh;
+    overflow-y: auto;
     display: block;
     font-family: 'Courier New', Courier, monospace;
     color: white;
     font-size: 16px;
     background: transparent;
     z-index: 1000;
-    margin-left: 20px; /* Houd een beetje afstand aan de linkerkant */
+    margin-left: 20px;
 }
 
 #toc a {
@@ -355,24 +429,30 @@ code {
     display: block;
     padding: 5px 10px;
     color: white;
-    font-size: 16px; /* Standaardgrootte */
+    font-size: 16px;
 }
 
 #toc a.active, #toc a:hover {
     margin-left: 10px;
-    font-size: 19px !important; /* 3px verschil in grootte bij actief of hover */
+    font-size: 19px !important;
     font-weight: bold;
     border-left: 2px solid white;
 }
 
 /* Stijlen voor subhoofdstukken (h3) */
 #toc a.h3 {
-    margin-left: 20px; /* Inspringen voor subhoofdstukken */
-    font-size: 12px; /* Kleinere lettergrootte voor subhoofdstukken */
+    margin-left: 20px;
+    font-size: 14px;
 }
 
 #toc a.h3.active {
-    font-size: 17px !important; /* Actieve stijl voor h3 */
+    font-size: 17px !important;
     font-weight: bold;
 }
 
+/* Aanpassingen voor de TOC op kleine schermen */
+@media (max-width: 768px) {
+    #toc {
+        display: none;
+    }
+}
