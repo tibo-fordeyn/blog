@@ -67,20 +67,20 @@ You can see how this could be very useful for going deep into a subject. However
 
             <pre><code class="language-vim">
 let g:vimwiki_list = [
-    {
-        'path': '~/dl/notebooks/',
-        'index': 'index',
-        'syntax': 'markdown',
-        'ext': '.md',
-        'auto_export': 0,
-        'template_path': '~/dl/notebooks/',
-        'template_default': 'default',
-        'template_ext': '.tpl',
-        'nested_syntaxes': {'python': 'python', 'bash': 'sh'},
-        'diary_rel_path': 'journal/',
-        'diary_index': 'index'
-    }
-]
+\ {
+\   'path': '~/dl/notebooks/',
+\   'index': 'index',
+\   'syntax':'markdown',
+\   'ext': '.md',
+\   'auto_export': 0,
+\   'template_path': '~/dl/notebooks/',
+\   'template_default': 'default',
+\   'template_ext': '.tpl',
+\   'nested_syntaxes': {'python': 'python', 'bash': 'sh'},
+\   'diary_rel_path': 'journal/',
+\   'diary_index': 'index'
+\ }
+\ ]
 map <leader>wi :VimwikiIndex<CR>
 set conceallevel=1
             </code></pre>
