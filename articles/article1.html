@@ -136,23 +136,23 @@ call plug#end()
     <p> 
     	These are the configurations to go along with the snippet-engine;
 	<pre><code class="language-vim">
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsExpandTrigger="&lt;tab&gt;"
+let g:UltiSnipsJumpForwardTrigger="&lt;tab&gt;"
+let g:UltiSnipsJumpBackwardTrigger="&lt;c-z&gt;"
 let g:UltiSnipsSnippetDirectories=["UltiSnips","Snippets"]
 let g:UltiSnipsEditSplit="vertical"
 	</code></pre>
     </p>
-<p> 
-	    The snippets are kept in <span class="highl">~/.vim/UltiSnips/markdown.snippets</span>.
         <p>
             By default, the <span class="highl">tab</span> trigger will not work for markdown. Add the following lines to your vimrc to fix this;
-            <pre><code class="language-vim custom-code">
+            <pre><code class="language-vim">
 autocmd FileType vimwiki UltiSnipsAddFiletypes markdown
-au filetype vimwiki silent! iunmap <buffer> <Tab>
+au filetype vimwiki silent! iunmap &lt;buffer&gt; &lt;Tab&gt;
 autocmd FileType vimwiki set filetype=markdown
             </code></pre>
         </p>
+<p> 
+	    The snippets are kept in <span class="highl">~/.vim/UltiSnips/markdown.snippets</span>.
 	<p> 
 	    Here's a snippet example that was used in the demo-vieo:
 	</p>
