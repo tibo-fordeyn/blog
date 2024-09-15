@@ -140,7 +140,7 @@ Plug 'preservim/vim-markdown'
 call plug#end()
     </code></pre>
     <p> 
-    	Where ultisnips is the snippet-engine. It makes everything work. Vim-snippets is a set of snippets, so you don't have to make all of them yourself. Vimtex is used for LaTeX compiling with vim and more, but we will use it for our math-mode compilation. Lastly tabular and vim-markdown are just used so that markdown features will be naturally integrated.
+    	Where ultisnips is the snippet-engine. It makes everything work. Vim-snippets is a set of snippets, so you don't have to create all of them yourself. Vimtex is used for LaTeX compiling with vim and more, but we will use it for our math-mode compilation. Lastly tabular and vim-markdown are just used so that markdown features will be naturally integrated.
     </p>
     <p> 
     	These are the configurations to go along with the snippet-engine;
@@ -313,6 +313,9 @@ nnoremap <Leader>pg :silent !/home/user/.local/bin/generate_presentation.sh %:p&
         <p>
             As you can see, I use mupdf viewer to show me the presentation. This is a very lightweight and easy to use viewer for powerpoints or other pdfs. Perfect for our task! the <span class="highl">-r 350</span> option creates a standard zoom. Using <span class="highl">H</span> when in the presentation sets it right for your client resolution according to height.
         </p>
+	<p> 
+		<span class="underl">I have tested this code in a virtual machine and concluded this works as intended. If you have any questions, feel free to contact me.</span> 
+	</p>
 	<div style="padding-bottom: 100px;"></div>
     </div>
     <script src="/static/syntax/prism.js"></script>
