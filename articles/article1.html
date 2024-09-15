@@ -37,6 +37,15 @@
 
 	In practice, you write your notes in Vimwiki, incorporating the markdown extension - and snippets. Then with some keybinds you can easily turn them into a presentation instantly.
         </p>
+        <h2 id="prerequisites">Prerequisites</h2>
+	To make sure you won't experience too much trouble, I'll list all the programs used for this post.
+	<ul>
+		<li> <span class="marked-text">Vim</span> (+ some vim-plugins that will be discussed)</li>
+		<li> <span class="marked-text">Markdown</span> </li>
+		<li>  <span class="marked-text">Pandoc</span></li>
+		<li>  <span class="marked-text">Mupdf</span> as the quick and lightweight pdf viewer of choice</li>
+		<li> <span class="marked-text">pdflatex</span></li>
+	</ul>
         <h2 id="vimwiki">Vimwiki</h2>
 	<p>
     Vimwiki is a tool used for keeping personal notes. <span class="underl">It's essentially just writing a file in vim, but with extra functionality</span> which allows you to create file hierarchies and navigate through these hierarchies quickly.
@@ -81,7 +90,7 @@ let g:vimwiki_list = [
 \   'diary_index': 'index'
 \ }
 \ ]
-map <leader>wi :VimwikiIndex<CR>
+map <leader>wi :VimwikiIndex&lt;CR&gt;
 set conceallevel=1
             </code></pre>
         </p>
@@ -121,7 +130,7 @@ set conceallevel=1
     <pre><code class="language-vim">
 call plug#begin('~/.vim/plugged')
 ...
-Plug 'vimwiki/vimwiki' " plugin we already discussed
+Plug 'vimwiki/vimwiki' " as discussed prior
 Plug 'SirVer/ultisnips' 
 Plug 'honza/vim-snippets'
 Plug 'lervag/vimtex' 
@@ -291,10 +300,10 @@ else
 fi
             </code></pre>
 	    <p> 
-	    	Save this script in <span class="highl">~/.local/bin</span> as <span class="highl">generate_presentations.sh</span>, then add the following line to your vimrc: 
+	    	Save this script in <span class="highl">~/.local/bin</span> as <span class="highl">generate_presentation.sh</span>. Make it executable by running <span class="highl">chmod +x generate_presentation.sh</span>. Finally add the following line to your vimrc: 
 	    </p>
             <pre><code class="language-bash custom-code">
-nnoremap <Leader>pg :silent !/home/user/.local/bin/generate_presentation.sh %:p<CR>:silent! redraw! <CR>
+nnoremap <Leader>pg :silent !/home/user/.local/bin/generate_presentation.sh %:p&lt;CR&gt;:silent! redraw! &lt;CR&gt;
             </code></pre>
         </p>
         <p>
