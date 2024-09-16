@@ -214,7 +214,6 @@ hr {
     color: inherit; /* Houd de tekstkleur hetzelfde als de omgeving */
     text-decoration: underline; /* Voeg een onderlijning toe */
     text-decoration-color: #003366; /* Donkerblauwe onderlijning */
-    font-weight: 600; /* Iets vetter dan normaal */
     text-decoration-thickness: 0px; /* Maak de onderlijning iets dikker */
     text-underline-offset: 3px; /* Geef wat ruimte tussen de tekst en de lijn */
 }
