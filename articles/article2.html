@@ -21,7 +21,7 @@
         <h1>The quickest way of adding screenshots to your Vim-LaTeX files</h1>
 	<p> 
 	<em>
-		Recently I found myself trying to categorise and order every exam question of a subject for the past five years. A rather tedious - and stupid - thing to do. It would've been impossibly slow had it not been for my screenshot setup.
+		Recently I found myself trying to categorise and order every exam question of a subject for the past five years. A rather tedious - and stupid - undertaking. It would've been impossibly slow had it not been for my screenshot setup.
 	</em>
 	</p>
 	video
@@ -71,12 +71,12 @@ flameshot gui -p "$filename"
 	</p>
 	<h3 id="symlinks">Symlinks</h3>
 	<p> 
-		It's important to notice I work with a base directory and a symlink so as to use the same technique in different subfolders to my <span class="highl">~/school</span> folder. If you want to use this in a single file, <span class="underl">you don't need a symlink</span>. <span class="underl">Change the code to only use a base directory.</span> 
+		It's important to notice I work with a base directory and a symlink so as to use the same technique in different subfolders to my <span class="highl">~/school</span> folder. If you want to use this in a single file, <span class="underl">no need for symlinks</span>. <span class="underl">Change the code to only use a base directory.</span> 
 	</p>
 	<p> 
 	Now let's go on to talk about this symlink, and the idea behind it.
-	<span class="underl">It's meant to be used for situatinos where you want the images in a variable place.</span>
-	<span class="underl">Define them in your base directory to go to your desired directory.</span> This could be done manually, or with scripts. I might later update this post to talk about automating symlink updates.
+	It's meant to be used for situatinos where you want the images in a variable place.
+	Define them in your base directory to go to your desired directory. This could be done manually, or with scripts. I might later update this post to talk about automating symlink updates.
 	</p>
 	<p> 
 		In my video example, the symlink was created as;
@@ -93,10 +93,13 @@ ln -s ~/school/year/semester/subject ~/school/current-subject
 		<pre><code class="language-bash">
 static const Key keys[] = {
 		...
-	{ 0, 0xffc3, 			spawn, 		SHCMD("/home/dyntif/.local/bin/vl-ss.sh") },
+	{ 0, 0xffc3, 			spawn, 		SHCMD("/home/user/.local/bin/vl-ss.sh") },
 		...	
 };
 		</code></pre>
+	</p>
+	<p> 
+		Where you should change <span class="highl">user</span> to your username. 
 	</p>
 	<p> 
 		As you see, I bound it to a rather weird key. It will look different if you'd bind it to a normal key. Don't blindly copy this. You can use a command like <span class="highl">xev | grep 'keycode'</span> for information aout the key you'll use. 
@@ -108,7 +111,7 @@ static const Key keys[] = {
 
 	<h2 id="snippetdefinition">A snippet</h2>
 	<p> 
-	I have to say, this was difficult to come up with. Lots of troubleshooting went into the following code. I'll assume you're using ultisnips snippet-engine with standard configuration. In <span class="highl">~/.vim/UltiSnips/tex.snippets</span> add the following function;
+	Lots of troubleshooting went into the following code. I'll assume you're using ultisnips snippet-engine with standard configuration. In <span class="highl">~/.vim/UltiSnips/tex.snippets</span> add the following function;
 	</p>
 
 	<pre><code class="language-python">
@@ -138,10 +141,10 @@ def create_latex_figure(base_path, scalefac="1"):
 endglobal
 	</code></pre>
 	<p> 
-		As you see, I wrote it so that an extra timestamp is added when this code is triggered. This solved a problem I had where making a lot of screenshots in a row threw a weird recursion error. 
+		As you see, I wrote it so that an extra timestamp is added when this code is triggered. This solved a problem I had where making a lot of screenshots in a row threw a mysterious recursion error. 
 	</p>
 	<p> 
-		To then use this function, I use the following snippet;
+		To then use this function, define the following snippet;
 		<pre><code class="language-bash">
 snippet ssp "Screenshot paste" bA
 `!p
@@ -161,14 +164,12 @@ snip.rv = create_latex_figure("~/school/jaar/semester/vak/images", "3")
 endsnippet
 		</code></pre>
 		<p> 
-		Here you see I made a scalefactor of three.
+		Here you see I made a scalefactor of three. This should now work without any issues.
 		</p>
 	</p>
-	<p> 
-		This should work without any problems! Feel free to message me if you have any questions or ideas. 
-	</p>
-	<p> 
-		One problem that I thought not to be solveable; I wanted to have a snippet where you could choose the scaling factor. I could not get this to work. So I'll leave it as a challenge for you!  
+	<div style="padding: 10px;"></div>
+	<p class="wit-kader"> 
+		One problem that I thought not to be solveable; I wanted to have a snippet where you could have snippet input choose the scaling factor. I could not get this to work. I'll leave it as a challenge for the reader!  
 	</p>
 
 

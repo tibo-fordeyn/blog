@@ -43,7 +43,7 @@ body, html {
 .blog-info, .home-link {
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
-    color: #DDDDDD;
+    color: #DDDDDD !important;
 }
 
 .home-link {
@@ -99,6 +99,12 @@ h3 {
 hr {
     display: none;
 }
+
+.wit-kader {
+    border: 1px solid white;
+    padding: 10px;
+}
+
 
 /* Responsieve styling voor verschillende schermgroottes */
 @media (max-width: 1200px) {
@@ -205,13 +211,14 @@ hr {
 /*LIJSTEN*/
 /* Algemene stijl voor onderlijnde tekst */
 .underl {
-    border: 1px solid #1ef5fe; /* Donkerblauwe kleur van de codeblok achtergrond */
-    color: inherit;
-    padding: 2px 4px;
-    border-radius: 4px;
-    display: inline;
-    text-decoration: none; /* Geen onderlijning */
+    color: inherit; /* Houd de tekstkleur hetzelfde als de omgeving */
+    text-decoration: underline; /* Voeg een onderlijning toe */
+    text-decoration-color: #003366; /* Donkerblauwe onderlijning */
+    font-weight: 600; /* Iets vetter dan normaal */
+    text-decoration-thickness: 0px; /* Maak de onderlijning iets dikker */
+    text-underline-offset: 3px; /* Geef wat ruimte tussen de tekst en de lijn */
 }
+
 
 /* Specifieke stijl voor ongenummerde lijsten (ul) */
 ul {
@@ -297,11 +304,13 @@ ul li, ol li {
 }
 
 a {
-    color: #163d57 !important; /* Zelfde kleur als de border van .underl */
-    text-decoration: none; /* Geen onderlijning */
-    font-style: italic; /* Licht cursief */
-    transition: color 0.3s ease;
+    color: #1ef5fe; /* Lichtblauwe kleur */
+    text-decoration: none; /* Geen standaard onderlijning */
+    font-style: italic; /* Schuingedrukt */
+    font-weight: 570; /* Iets vetter dan normaal */
+    transition: color 0.3s ease; /* Soepele overgang voor hover-effect */
 }
+
 a:hover {
     color: #FFFFFF; /* Tekst wordt wit bij hover */
 }
