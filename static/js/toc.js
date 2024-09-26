@@ -82,16 +82,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Functie om te controleren of de TOC zichtbaar moet zijn op basis van zoomniveau en vensterbreedte
+    // Functie om te controleren of de TOC zichtbaar moet zijn op basis van de afstand tot de artikeltekst
     function checkVisibility() {
-        // Bepaal het zoomniveau via window.devicePixelRatio
-        var zoomLevel = window.devicePixelRatio * 100;
+        // Haal de bounding rectangles op van de TOC en de artikeltekst
+        var tocRect = toc.getBoundingClientRect();
+        var content = document.getElementById('blog-content'); // Vervang 'blog-content' door de juiste id of class
+        var contentRect = content.getBoundingClientRect();
 
-        // Haal de vensterbreedte op
-        var windowWidth = window.innerWidth;
+        // Bereken de horizontale afstand tussen de TOC en de artikeltekst
+        var distance = contentRect.left - (tocRect.left + tocRect.width);
 
-        // TOC verbergen bij zoomniveaus van 140% of meer of bij vensterbreedtes kleiner dan 1000px
-        if (zoomLevel > 140 || windowWidth < 1000) {
+        // TOC verbergen als de afstand minder is dan of gelijk aan 10px
+        if (distance <= 10) {
             toc.style.display = 'none';
         } else {
             toc.style.display = 'block';

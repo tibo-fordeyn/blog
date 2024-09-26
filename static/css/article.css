@@ -79,23 +79,34 @@ p {
 p:first-of-type {
     font-weight: bold;
     color: #CCCCCC;
-    text-align: left !important;
+}
+h2 {
+    font-size: 28px;
+    color: #EAECEE;
+    margin-top: 20px;
+    padding: 0 0px;
+    text-align: center;
+    position: relative; /* Nodig voor positionering van pseudo-element */
+    padding-bottom: 10px; /* Extra ruimte voor de decoratieve lijn */
 }
 
-h2 {
-    font-size: 26px !important;
-    color: #EAECEE;
-    margin-top: 30px;
-    padding: 0 20px;
-    text-align: left;
-} 
 h3 {
-    font-size: 18px !important;
-    color: #EAECEE;
+    font-size: 22px; /* Middelgrote titel */
+    color: #0099CC; /* Blauwe kleur voor h3 titels */
     margin-top: 30px;
-    padding: 0 20px;
+    padding: 0 40px; /* Iets meer naar links uitgelijnd dan h2 */
     text-align: left;
 }
+
+h4 {
+    font-size: 18px; /* Kleinste titel */
+    color: #EAECEE;
+    margin-top: 30px;
+    padding: 0 60px; /* Meer naar links uitgelijnd dan h3 */
+    text-align: left;
+    border-left: 5px solid #0099CC; /* Verticale blauwe lijn voor visuele distinctie */
+}
+
 
 hr {
     display: none;
