@@ -73,23 +73,24 @@ p {
     line-height: 1.6;
     margin: 10px 0;
     padding: 0 20px;
-    text-align: justify;
+    text-align: left;
 }
 
 p:first-of-type {
     font-weight: bold;
     color: #CCCCCC;
+    text-align: left !important;
 }
 
 h2 {
-    font-size: 26px;
+    font-size: 26px !important;
     color: #EAECEE;
     margin-top: 30px;
     padding: 0 20px;
     text-align: left;
 } 
 h3 {
-    font-size: 22px;
+    font-size: 18px !important;
     color: #EAECEE;
     margin-top: 30px;
     padding: 0 20px;
