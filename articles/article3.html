@@ -38,7 +38,7 @@
 	Now the downside to this is that it might obscure your document. It might cause you to think about the cards while writing lecture notes -- which we do not want!
 	<span class="underl">What I found to be the best option, is to define certain ques for the .tex file that won't be annoying.</span> They'll be easy to make and manage. They won't be in the way when writing. To make this happen I use Vim functionality. The scripts will ofcourse function with any editor, but the efficiency comes from Vim. In what follows I'll start by discussing the parser, then how to make things look clean while writing
 </p>
-<h3>Parser functioning</h3>
+<h3 id="Parser functioning">Parser functioning</h3>
 <p> 
 	I'll keep this to what is relevant since it isn't important to understand how this works for using the script. 
 The parser looks at the following LaTeX commands -- you don't necessarily have to explitly define these since they don't serve a function within the actual document!
@@ -166,7 +166,7 @@ endsnippet
     Your browser does not support the video tag.
 </video>
 </p>
-<h3>Concealing with Vim</h3>
+<h3 id="concealing with vim">Concealing with Vim</h3>
 <p> 
 I won't get into concealing too deep, because that's a whole other topic. Though  it is crucial to do this right if you want to look at your document without thinking about these cards. In the previous demos you can see how I used <span class="highl">?</span> and <span class="highl">!</span>.
 </p>
@@ -212,7 +212,7 @@ This is shown in the demo at the top of this post.
 	</p>
 </p>
 
-	<h2>Conclusion</h2>
+	<h2 id="conclusion">Conclusion</h2>
 	<p> 
 		These scripts and tips should enable you to generate anki cards from your LaTeX notes with Vim. To generalize for Makdown or other typescripting langueges, all you should do is recognise which "commands" won't impact your document, but will be easy for a script to pick up on. Use those instead of the ones here in the <span class="highl">parser.py</span> script, then rewrite all the related Vim commands, you'll be good to go!
 	</p>
