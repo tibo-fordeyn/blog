@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="static/images/pfp.jpeg" type="image/jpeg">
+    <link rel="icon" href="static/images/pfp.jpeg" type="image/jpeg" class="profile-photo" alt="Profielfoto">
     <title>Home | Tibo Fordeyn</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="static/css/index.css">
@@ -27,38 +27,52 @@
                 <li><a href="https://github.com/tibo-fordeyn" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
                 <li><a href="mailto:dyntif@tutanota.com" target="_blank"><i class="fas fa-envelope"></i> Mail</a></li>
                 <li><a href="https://signal.org" target="_blank"><i class="fas fa-comment-dots"></i> Signal</a></li>
-                <li><a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></li>
             </ul>
         </div>
+
         <div class="main-content">
             <article class="article" onclick="location.href='articles/article3.html';">
                 <h2>My lightweight anki converter and usage with Vim [anki-gen]</h2>
                 <p class="date">26 sept 2024 - 13 min read</p>
-                <p>When using anki-cards, I tend to memorise any type of informatioon more quickly. Since I take notes in LaTeX with Vim, it seemed natural to write a few python scripts that would automate 
+                <p class="description">When using anki-cards, I tend to memorise any type of information more quickly. Since I take notes in LaTeX with Vim, it seemed natural to write a few python scripts that would automate... 
                     <em><strong>Read more ...</strong></em>
                 </p>
             </article>
             <article class="article" onclick="location.href='articles/article2.html';">
                 <h2>The quickest way to add and manage screenshots in LaTeX </h2>
                 <p class="date">08 september 2024 - 5 min read</p>
-                <p> Recently I found myself trying to categorise and order every exam question of a subject for the past five years. A rather tedious - and stupid - undertaking. It would've been impossibly slow had it not been
+                <p class="description">Recently I found myself trying to categorise and order every exam question of a subject for the past five years. A rather tedious - and stupid - undertaking. It would've been impossibly slow had it not been...
                     <em><strong>Read more ...</strong></em>
                 </p>
             </article>
             <article class="article" onclick="location.href='articles/article1.html';">
                 <h2>Utilising Vimwiki - Markdown - Pandoc to instantly generate presentations from notes </h2>
                 <p class="date">12 april 2024 - 10 min read</p>
-                <p>A while back I had an internship for which some research needed to be done. At that time I was taking notes with Vimwiki. When a meeting was spontaneously scheduled, I wanted to be able to present 
+                <p class="description">A while back I had an internship for which some research needed to be done. At that time I was taking notes with Vimwiki. When a meeting was spontaneously scheduled, I wanted to be able to present...
                     <em><strong>Read more ...</strong></em>
                 </p>
             </article>
         </div>
     </div>
+    	<div style="padding-bottom: 100px;"></div>
 </body>
-</html>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     document.body.style.display = 'block';
+
+    // Dynamisch verkorten van de tekst op mobiel
+    const descriptions = document.querySelectorAll('.article .description');
+    const maxTextLength = 150; // Maximale lengte van de tekst op mobiel
+
+    descriptions.forEach(description => {
+        if (window.innerWidth <= 768) { // Pas de tekst aan voor mobiele schermen
+            const originalText = description.textContent.trim();
+            if (originalText.length > maxTextLength) {
+                const truncatedText = originalText.substring(0, maxTextLength) + '...';
+                description.textContent = truncatedText;
+            }
+        }
+    });
 });
 </script>
-
+</html>

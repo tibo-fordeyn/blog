@@ -41,18 +41,21 @@ body, html {
 }
 
 .blog-info, .home-link {
+    font-style: normal !important;
     font-family: 'Courier New', Courier, monospace;
+    font-style: normal !important;
     font-size: 14px;
     color: #DDDDDD !important;
 }
 
 .home-link {
+    font-style: normal !important;
     text-decoration: none;
-    display: flex;
     align-items: center;
 }
 
 .home-link i {
+    font-style: normal !important;
     margin-right: 10px;
 }
 
@@ -157,6 +160,7 @@ hr {
         padding: 10px;
     }
     .blog-info, .home-link {
+    	font-style: normal !important;
         font-size: 13px;
     }
     p {
@@ -182,6 +186,7 @@ hr {
         align-items: flex-start;
     }
     .home-link {
+    	font-style: normal !important;
         margin-bottom: 10px; /* Ruimte tussen de link en de datum */
     }
     .blog-info, .home-link {
@@ -213,6 +218,7 @@ hr {
         font-size: 14px;
     }
     .blog-info, .home-link {
+    	font-style: normal !important;
         font-size: 11px;
     }
     #toc {
