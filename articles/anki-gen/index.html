@@ -34,13 +34,22 @@
 	
 	<h2 id="parsing">Parsing</h2>
 <p> 
-	This is really the most defining step for a project like this. What was important to me was <span class="underl">to have the ability to decide which parts within my files should become questions and answers</span>. But I obviously didn't want to go and use external files or anything that would take time. Therefore it seemed natural to have a parser defined to look at certain patterns -- ques -- within the script. 
+	This is really the most defining step for a project like this. What was
+	important to me was <span class="underl">to have the ability to decide
+	which parts within my files should become questions and answers</span>.
+But I obviously didn't want to go and use external files or anything that would
+take time. Therefore I'd need to have a parser defined to look at certain patterns -- ques -- within the script. 
 	Now the downside to this is that it might obscure your document. It might cause you to think about the cards while writing lecture notes -- which we do not want!
-	<span class="underl">What I found to be the best option, is to define certain ques for the .tex file that won't be annoying.</span> They'll be easy to make and manage. They won't be in the way when writing. To make this happen I use Vim functionality. The scripts will ofcourse function with any editor, but the efficiency comes from Vim. In what follows I'll start by discussing the parser, then how to make things look clean while writing
+	<span class="underl">What I found to be the best option, is to define
+		certain ques for the .tex file that won't be annoying.</span>
+	They'll be easy to make and manage. They won't be in the way when
+	writing. To make this happen I use Vim functionality. The scripts will
+	ofcourse function independent of your editor, but the efficiency comes from Vim. In what follows I'll start by discussing the parser, then how to make things look clean while writing
 </p>
 <h3 id="Parser functioning">Parser functioning</h3>
 <p> 
-	I'll keep this to what is relevant since it isn't important to understand how this works for using the script. 
+	I'll keep this section to what is relevant since it isn't important to
+	understand the script for using it. 
 The parser looks at the following LaTeX commands -- you don't necessarily have to explitly define these since they don't serve a function within the actual document!
 </p>
 <pre><code class="language-latex">\NewDocumentCommand{\akq}{m}{#1} % Anki question
@@ -118,7 +127,7 @@ Where the key is your box command, the value is what will be displayed as <span 
 
 <h3 id="automating with vim">Automating with Vim</h3>
 <p> 
-	We will make use of two Vim functionalities. Remapping and Snippets.
+	We will make use of two Vim functionalities. Remappings and Snippets.
 <h4 id="remappings">Remappings</h4>
 <p> 
 	Let's first discuss remappings. You might find yourself wanting to later add and delete card definitions. I have defined a very convenient mapping for this in visual mode. You select the relevant text, and will be able to make it a question, answer or delete its current being one. First add these lines to your <span class="highl">vimrc</span> to outsource this, because their definitons are long. I wouldn't want to induce bloat.
@@ -145,7 +154,8 @@ vnoremap &lt;leader&gt;a :&lt;C-U&gt;call SurroundWithAnki('akns')&lt;CR&gt; " A
 </p>
 <h4 id="snippets">Snippets</h4>
 <p> 
-Here I use snippets to define the anki commands within my box snippets. For some boxes I didn't do this, as you might not want every box to eventually turn into a card. But for the definition box, as an example, I've defined the following in my <span class="highl">~/.vim/UltiSnips/tex.snippets</span>;
+Here I use snippets to define the anki commands within my box snippets. I would
+not do this for all boxes, as you might not want every box to eventually turn into a card. But for the definition box, as an example, I've defined the following in my <span class="highl">~/.vim/UltiSnips/tex.snippets</span>;
 </p>
 <pre><code class="language-vim">snippet dfin "Definitie kader!" bA
 \dfn{$1}{\akq{
@@ -156,14 +166,16 @@ $3
 endsnippet
 </code></pre> 
 <p> 
-	Defining the box like this really only made the definition more clear in my head.
+	Defining the box like this really only made the definition more clear
+	in my head. It didn't seem to take away from my focus whilst writing,
+	but forced me to think about the subject matter composition.
 <video src="/static/videos/article3/snippet-demo.mp4" autoplay loop muted playsinline>
     Your browser does not support the video tag.
 </video>
 </p>
 <h3 id="concealing with vim">Concealing with Vim</h3>
 <p> 
-I won't get into concealing too deep, because that's a whole other topic. Though  it is crucial to do this right if you want to look at your document without thinking about these cards. In the previous demos you can see how I used <span class="highl">?</span> and <span class="highl">!</span>.
+I won't get too deep into concealing, because that's a whole other topic. Though  it is crucial to do this right if you want to look at your document without thinking about these cards. In the previous demos you can see how I used <span class="highl">?</span> and <span class="highl">!</span>.
 </p>
 <pre><code class="language-vim">syntax match texAkq "\\akq" conceal cchar=?  
 syntax match texAkns "\\akns" conceal cchar=! 
@@ -177,7 +189,7 @@ syntax match texAkns "\\akns" conceal cchar=!
 
 <h2 id="anki operation">Anki operations</h2>
 <p> 
-Just four operations should suffice for all usecases. They're defined in the <span class="highl">./scripts/</span> folder of my GitHub repo; <span class="highl">anki switch</span>,<span class="highl">anki add</span>,<span class="highl">anki delete</span>,<span class="highl">anki empty</span>. To easily acces them in vim, add the following mappings to your <span class="highl">vimrc</span>;
+Just four operations should suffice for all usecases. They're defined in the <span class="highl">./scripts/</span> folder of my GitHub repo; <span class="highl">anki switch</span>,<span class="highl">anki add</span>,<span class="highl">anki delete</span>,<span class="highl">anki empty</span>. To acces them in vim, add the following mappings to your <span class="highl">vimrc</span>;
 </p>
 <pre><code class="language-vim">nnoremap &lt;leader&gt;aa :call system('~/.local/share/anki-gen/scripts/aa.py ' . shellescape(expand('%')))<CR>
 nnoremap &lt;leader&gt;as :call system('~/.local/share/anki-gen/scripts/as.py ' . shellescape(expand('%')))<CR>
@@ -188,17 +200,26 @@ nnoremap &lt;leader&gt;ae :call system('~/.local/share/anki-gen/scripts/ae.py ' 
 <h3 id="switch and add">Switch and add</h3>
 <p> 
 To switch the card of a deck we use <span class="highl">leader as</span>. This will delete all the current cards on that deck and replace them with the ones in your file.
-This is shown in the demo at the top of this post.
+
 </p>
 <p> 
-	The command obviously will first list you all the decks you have with dmenu. <span class="underl">You can select one, but you could also write a new deck name.</span> Then a new deck wil be created. 
+	The command obviously will first list you all the decks you have with
+	dmenu. <span class="underl">You can select one, but you could also
+	write a new deck name.</span> Then a new deck wil be created. You can
+even make a new subdeck without first creating the lower deck. Just write <span
+	class="highl">deck::subdeck</span>.
 </p>
 <p> 
-	The only difference with adding <span class="highl">leader aa</span> is that it does not delete your current cards. Aside from this, everything remains the same.
+	The only difference adding -- <span
+		class="highl">leader aa</span> -- has compared to switching is that it does not delete your current cards. Aside from this, everything remains the same.
 </p>
 <h3 id="empty and delete">Empty and Delete</h3>
 <p> 
-	The existence of these cards kind of goes against the philosophy of this project. I don't want this to be some remote operation anki thing. But being able to delete a deck when needed, or emptying one, seemed useful. Emptying a deck only has a usecase when making subdecks. It's trivial, but can be useful for when you decide to split big decks up. This in general you should do because switching will always delete anki's memory of your previous cards.
+	The existence of these cards kind of goes against the philosophy of
+	this project. I don't want this to be some remote operation anki thing.
+	But being able to delete -- <span class="highl">leader ad</span> -- a
+	deck when needed, or emptying -- <span class="highl">leader ae</span>
+	-- one, seemed useful. Emptying a deck only has a usecase when making subdecks. It's trivial, but can be useful for when you decide to split big decks up. This in general you should do because switching will always delete anki's memory of your previous cards.
 	<p> 
 	<div style="text-align: center;">
     		<img src="/static/images/screenshot.png" alt="Screenshot" width="600" />
