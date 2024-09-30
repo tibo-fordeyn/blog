@@ -31,10 +31,15 @@
 
 	<p> 
 		In essence, we'll first write a script that places a screenshot in the desired directory. We do this using symlinks. Then we define a snippet function to paste this screenshot in an intelligent way. 
-		The idea is almost too simple to write about, but the snippet function was so difficult to come up with it ruined a day of my life. I couldn't find anyone else doing this, so I figured this might be cool to write about.
+		The idea is almost too simple to write about, but the snippet
+		function was quite creative. I couldn't find anyone else doing this, so I figured this might be cool to write about.
 	</p>
 
 	<h2 id="takingshots">Taking shots</h2>
+
+Let's first discuss taking the screenshot. This entails making a script,
+binding a key to it, keeping it in the right place.
+
 	<h3 id="script">Script</h3>
 	<p> 
 	Let's first write the script for taking the screenshot. I have written a script <span class="highl">~/.local/bin/vl-ss.sh</span> -- where vl is supposed to mean vimlatex.
