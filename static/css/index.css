@@ -80,7 +80,8 @@ html, body {
 
 /* Artikel stijlen */
 .article {
-    background-color: #1B263B;
+    /*background-color: #1B263B;*/
+    background-color: #0D1B2A; /* Donkerblauwe achtergrond voor de hele pagina */
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
