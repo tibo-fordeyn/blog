@@ -111,7 +111,7 @@ Definition; Saddle point
     }
 </code></pre>
 <p> 
-Where the key is your box command, the value is what will be displayed as <span class="marked-text">Type of box</span>. If no box was found on the same line as the <span class="highl">\akq</span>, the top line of that card will not display anything about the card. The box being there is more of a special case. 
+Where the key is your box command, the value is what will be displayed as <span class="marked-text">Type of box</span>. If no box was found on the same line as the <span class="highl">\akq</span>, the top line of that card will not display anything about the card. The box being there is more of a special case. If lines are commented out of your file, no card will be generated.
 </p>
 <p> 
 	Before ending our discussion about the parser, I'll mention a few edge cases that will be ignored. 
@@ -119,6 +119,7 @@ Where the key is your box command, the value is what will be displayed as <span 
 		<li>Empty questions or answers will be ignored - they won't be considerd at all</li>
 		<li>If two answers in a row are given, the second one will always be ignored  </li>
 		<li>If two questions in a row are given, the first one will always be ignored  </li>
+		<li>If a question or answer was commented out of the file, the parser will throw it out.</li>
 	</ol>
 </p>
 <p> 
