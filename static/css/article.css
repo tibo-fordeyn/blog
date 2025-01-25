@@ -43,7 +43,6 @@ body, html {
 .blog-info, .home-link {
     font-style: normal !important;
     font-family: 'Courier New', Courier, monospace;
-    font-style: normal !important;
     font-size: 14px;
     color: #DDDDDD !important;
 }
@@ -83,6 +82,7 @@ p:first-of-type {
     font-weight: bold;
     color: #CCCCCC;
 }
+
 h2 {
     font-size: 28px;
     color: #EAECEE;
@@ -110,7 +110,6 @@ h4 {
     border-left: 5px solid #0099CC; /* Verticale blauwe lijn voor visuele distinctie */
 }
 
-
 hr {
     display: none;
 }
@@ -122,7 +121,7 @@ hr {
 
 
 /* Responsieve styling voor verschillende schermgroottes */
-@media (max-width: 1200px) {
+@media (max-width: 1500px) {
     body, html {
         font-size: 19px;
     }
@@ -136,7 +135,16 @@ hr {
         font-size: 20px;
     }
     h4 {
-	font-size: 18px;
+        font-size: 18px;
+    }
+
+    /*
+      Als je wilt dat de TOC geheel verdwijnt onder 1200px breedte:
+      Gebruik !important, zodat het inline-styles overschrijft
+      (als die er ooit mochten komen).
+    */
+    #toc {
+        display: none !important;
     }
 }
 
@@ -163,7 +171,6 @@ hr {
         padding: 10px;
     }
     .blog-info, .home-link {
-    	font-style: normal !important;
         font-size: 13px;
     }
     p {
@@ -189,7 +196,6 @@ hr {
         align-items: flex-start;
     }
     .home-link {
-    	font-style: normal !important;
         margin-bottom: 10px; /* Ruimte tussen de link en de datum */
     }
     .blog-info, .home-link {
@@ -221,11 +227,10 @@ hr {
         font-size: 14px;
     }
     .blog-info, .home-link {
-    	font-style: normal !important;
         font-size: 11px;
     }
     #toc {
-        display: none; /* Verberg de inhoudsopgave op zeer kleine schermen */
+        display: none !important; /* Verberg TOC op zeer kleine schermen */
     }
 }
 
@@ -439,6 +444,9 @@ code {
 
 /* INHOUDSOPGAVE CSS */
 #toc {
+    /* Door hier 'display: block' te zetten, is de TOC standaard zichtbaar
+       tenzij er een @media-regel is (1200px/768px/576px) die hem verbergt.
+    */
     position: sticky;
     top: 100px;
     max-height: 70vh;
@@ -461,7 +469,8 @@ code {
     font-size: 16px;
 }
 
-#toc a.active, #toc a:hover {
+#toc a.active,
+#toc a:hover {
     margin-left: 10px;
     font-size: 19px !important;
     font-weight: bold;
@@ -479,9 +488,13 @@ code {
     font-weight: bold;
 }
 
-/* Aanpassingen voor de TOC op kleine schermen */
+/* 
+   @media (max-width: 768px) verbergt de TOC sowieso, 
+   dus bovenin staat al 1200px. 
+   Hier nog eens, specifiek voor <768px:
+*/
 @media (max-width: 768px) {
     #toc {
-        display: none;
+        display: none !important;
     }
 }
