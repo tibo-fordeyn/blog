@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/images/pfp.jpeg" type="image/jpeg">
+    <title>My lightweeight anki converter and usage with Vim</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/article.css">
+    <link rel="stylesheet" href="/static/syntax/prism.css">
+
+</head>
+<body>
+<div id="toc" class="toc-container"></div>
+    <div class="blog-container">
+        <div class="blog-header">
+            <a href="/" class="home-link"><i class="fas fa-arrow-left"></i> Home </a>
+            <span class="blog-info">26 september 2024 | 13 min read</span>
+        </div>
+        <hr>
+        <h1>My lightweight anki converter and usage with Vim</h1>
+	<p> 
+	<em>
+		When using anki cards I tend to memorise quicker. I take notes in LaTeX or Markdown with Vim. It therefore seemed natural to write a few python scripts and generate these cards from my notes. This has been a major improvement to my studying method.
+	</em>
+	</p>
+
+<video src="/static/videos/article3/demo.mp4" autoplay loop muted playsinline>
+    Your browser does not support the video tag.
+</video>
+	<p> 
+		The source code for this project can be found on my GitHub. Here I will explain the ideas as well as how I use it with Vim and with my LaTeX preamble settings. For LaTeX, this will work out of the box. To use it for Markdown and other filetypes you'll need to be creative with using commenting in different langueges and tweeking the parser script a little. I'm using only slightly different code for Markdown.
+	</p>
+	
+	<h2 id="parsing">Parsing</h2>
+<p> 
+	This is really the most defining step for a project like this. What was
+	important to me was <span class="underl">to have the ability to decide
+	which parts within my files should become questions and answers</span>.
+But I obviously didn't want to go and use external files or anything that would
+take time. Therefore I'd need to have a parser defined to look at certain patterns -- ques -- within the script. 
+	Now the downside to this is that it might obscure your document. It might cause you to think about the cards while writing lecture notes -- which we do not want!
+	<span class="underl">What I found to be the best option, is to define
+		certain ques for the .tex file that won't be annoying.</span>
+	They'll be easy to make and manage. They won't be in the way when
+	writing. To make this happen I use Vim functionality. The scripts will
+	ofcourse function independent of your editor, but the efficiency comes from Vim. In what follows I'll start by discussing the parser, then how to make things look clean while writing
+</p>
+<h3 id="Parser functioning">Parser functioning</h3>
+<p> 
+	I'll keep this section to what is relevant since it isn't important to
+	understand the script for using it. 
+The parser looks at the following LaTeX commands -- you don't necessarily have to explitly define these since they don't serve a function within the actual document!
+</p>
+<pre><code class="language-latex">\NewDocumentCommand{\akq}{m}{#1} % Anki question
+\NewDocumentCommand{\akns}{m}{#1} % Anki answer
+</code></pre>
+<p> 
+	What the <span class="highl">./parser/parser.py</span> script will do is turn them into the following syntax in <span class="highl">./files/cards.txt</span>.
+</p>
+<pre><code class="language-vim">Type of box; title
+Question
+||||||||||
+Answer
+----------
+</code></pre> 
+<p> 
+	The <span class="marked-text">Type of box; title</span> part is used when the anki commands were placed behind a different box. This is useful for distinguishing different types of questions according to your document structure. I'll give you an example.
+</p>
+<pre><code class="language-latex">\dfn{Saddle point}{ \akq{
+	A saddle point $p_{0}  $ can be defined as
+}\akns{
+	\[
+	\forall \epsilon > 0: \exists p_{1} ,p_{2} \in N(p_{0} , \epsilon ): f(p_{0}  ) > f(p_{1}  ) \wedge f(p_{0}  ) < f(p_{2}  )       
+	.\]  
+	For a function f
+}}
+</code></pre>
+<p> 
+will be turned into;
+</p>
+<pre><code class="language-vim">
+Definition; Saddle point
+	A saddle point $p_{0}  $ can be defined as
+||||||||||
+	\[
+	\forall \epsilon > 0: \exists p_{1} ,p_{2} \in N(p_{0} , \epsilon ): f(p_{0}  ) > f(p_{1}  ) \wedge f(p_{0}  ) < f(p_{2}  )       
+	.\]  
+	For a function f
+----------
+</code></pre> 
+<p> 
+	From this the card is generated. You can define your own commands and their function in the <span class="highl">./parser/parser.py</span> file;
+</p>
+<pre><code class="language-python"># DEFINE YOUR BOX COMMANDS HERE
+    kader_commands = {
+        'dfn': 'Definition',
+        'prf': 'Proof',
+        'lmm': 'Lemma',
+        'cor': 'Corollary',
+        'prop': 'Proposition',
+        'thm': 'theorem',
+        'idea': 'Idea',
+        'clar': 'Clarification',
+        'rem': 'Reminder',
+        'add': 'Addendum',
+        'ex': 'Example',
+        'qs': 'Question',
+        'exqs': 'Exam Question',
+        'bsl': 'Conclusion',
+    }
+</code></pre>
+<p> 
+Where the key is your box command, the value is what will be displayed as <span class="marked-text">Type of box</span>. If no box was found on the same line as the <span class="highl">\akq</span>, the top line of that card will not display anything about the card. The box being there is more of a special case. If lines are commented out of your file, no card will be generated.
+</p>
+<p> 
+	Before ending our discussion about the parser, I'll mention a few edge cases that will be ignored. 
+	<ol>
+		<li>Empty questions or answers will be ignored - they won't be considerd at all</li>
+		<li>If two answers in a row are given, the second one will always be ignored  </li>
+		<li>If two questions in a row are given, the first one will always be ignored  </li>
+		<li>If a question or answer was commented out of the file, the parser will throw it out.</li>
+	</ol>
+</p>
+<p> 
+	To put it in simple terms, that just means there always has to be a well-defined question, followed by a well-defined answer, to make a card. Where well-defined would mean anki accepts it.
+</p>
+
+<h3 id="automating with vim">Automating with Vim</h3>
+<p> 
+	We will make use of two Vim functionalities. Remappings and Snippets.
+<h4 id="remappings">Remappings</h4>
+<p> 
+	Let's first discuss remappings. You might find yourself wanting to later add and delete card definitions. I have defined a very convenient mapping for this in visual mode. You select the relevant text, and will be able to make it a question, answer or delete its current being one. First add these lines to your <span class="highl">vimrc</span> to outsource this, because their definitons are long. I wouldn't want to induce bloat.
+</p>
+<pre><code class="language-vim">if filereadable(expand("~/.vim/extra/mappings.vim"))
+    source ~/.vim/extra/mappings.vim
+endif
+</code></pre> 
+<p> 
+	Then add the code found in <span class="highl">./vim-extras</span> on my GitHub to <span class="highl">~/.vim/extra/mappigs.vim</span> file. You'll now have the functionality from the following demo -- I'm using some concealling here, I'll touch on that later!
+</p>
+<p> 
+<video src="/static/videos/article3/mapping-demo.mp4" autoplay loop muted playsinline>
+    Your browser does not support the video tag.
+</video>
+</p>
+<p> 
+This demo shows you how it works. It will also work when the latex command stand after a box definition! This snippet is defined to look at the end of the last line for the command, and at the beginning of the next for the closing curly brace.
+</p>
+<p> 
+	<pre><code class="language-vim">vnoremap &lt;leader&gt;d :&lt;C-U&gt;call DeleteAnkiWrapper()&lt;CR&gt; " Delete
+vnoremap &lt;leader&gt;q :&lt;C-U&gt;call SurroundWithAnki('akq')&lt;CR&gt; " Question
+vnoremap &lt;leader&gt;a :&lt;C-U&gt;call SurroundWithAnki('akns')&lt;CR&gt; " Answer</code></pre>  
+</p>
+<h4 id="snippets">Snippets</h4>
+<p> 
+Here I use snippets to define the anki commands within my box snippets. I would
+not do this for all boxes, as you might not want every box to eventually turn into a card. But for the definition box, as an example, I've defined the following in my <span class="highl">~/.vim/UltiSnips/tex.snippets</span>;
+</p>
+<pre><code class="language-vim">snippet dfin "Definitie kader!" bA
+\dfn{$1}{\akq{
+	$2
+}\akns{
+$3
+}}$4
+endsnippet
+</code></pre> 
+<p> 
+	Defining the box like this really only made the definition more clear
+	in my head. It didn't seem to take away from my focus whilst writing,
+	but forced me to think about the subject matter composition.
+<video src="/static/videos/article3/snippet-demo.mp4" autoplay loop muted playsinline>
+    Your browser does not support the video tag.
+</video>
+</p>
+<h3 id="concealing with vim">Concealing with Vim</h3>
+<p> 
+I won't get too deep into concealing, because that's a whole other topic. Though  it is crucial to do this right if you want to look at your document without thinking about these cards. In the previous demos you can see how I used <span class="highl">?</span> and <span class="highl">!</span>.
+</p>
+<pre><code class="language-vim">syntax match texAkq "\\akq" conceal cchar=?  
+syntax match texAkns "\\akns" conceal cchar=! 
+</code></pre> 
+<p> 
+	Make sure you have vim-conceal plugins installed. These should give the <span class="highl">?</span> and <span class="highl">!</span> functionality. Those will always be shown unless you toggle conceal. 
+</p>
+<p> 
+	This might still distract. You could also opt for just no conceal character. 
+</p>
+
+<h2 id="anki operation">Anki operations</h2>
+<p> 
+Just four operations should suffice for all usecases. They're defined in the <span class="highl">./scripts/</span> folder of my GitHub repo; <span class="highl">anki switch</span>,<span class="highl">anki add</span>,<span class="highl">anki delete</span>,<span class="highl">anki empty</span>. To acces them in vim, add the following mappings to your <span class="highl">vimrc</span>;
+</p>
+<pre><code class="language-vim">nnoremap &lt;leader&gt;aa :call system('~/.local/share/anki-gen/scripts/aa.py ' . shellescape(expand('%')))<CR>
+nnoremap &lt;leader&gt;as :call system('~/.local/share/anki-gen/scripts/as.py ' . shellescape(expand('%')))<CR>
+nnoremap &lt;leader&gt;ad :call system('~/.local/share/anki-gen/scripts/ad.py ' . shellescape(expand('%')))<CR>
+nnoremap &lt;leader&gt;ae :call system('~/.local/share/anki-gen/scripts/ae.py ' . shellescape(expand('%')))<CR>
+</code></pre> 
+
+<h3 id="switch and add">Switch and add</h3>
+<p> 
+To switch the card of a deck we use <span class="highl">leader as</span>. This will delete all the current cards on that deck and replace them with the ones in your file.
+
+</p>
+<p> 
+	The command obviously will first list you all the decks you have with
+	dmenu. <span class="underl">You can select one, but you could also
+	write a new deck name.</span> Then a new deck wil be created. You can
+even make a new subdeck without first creating the lower deck. Just write <span
+	class="highl">deck::subdeck</span>.
+</p>
+<p> 
+	The only difference adding -- <span
+		class="highl">leader aa</span> -- has compared to switching is that it does not delete your current cards. Aside from this, everything remains the same.
+</p>
+<h3 id="empty and delete">Empty and Delete</h3>
+<p> 
+	The existence of these cards kind of goes against the philosophy of
+	this project. I don't want this to be some remote operation anki thing.
+	But being able to delete -- <span class="highl">leader ad</span> -- a
+	deck when needed, or emptying -- <span class="highl">leader ae</span>
+	-- one, seemed useful. Emptying a deck only has a usecase when making subdecks. It's trivial, but can be useful for when you decide to split big decks up. This in general you should do because switching will always delete anki's memory of your previous cards.
+	<p> 
+	<div style="text-align: center;">
+    		<img src="/static/images/screenshot.png" alt="Screenshot" width="600" />
+	</div>
+
+	</p>
+</p>
+
+	<h2 id="conclusion">Conclusion</h2>
+	<p> 
+		These scripts and tips should enable you to generate anki cards from your LaTeX notes with Vim. To generalize for Makdown or other typescripting langueges, all you should do is recognise which "commands" won't impact your document, but will be easy for a script to pick up on. Use those instead of the ones here in the <span class="highl">parser.py</span> script, then rewrite all the related Vim commands, you'll be good to go!
+	</p>
+
+
+	<div style="padding-bottom: 100px;"></div>
+    <script src="/static/syntax/prism.js"></script>
+    <script src="/static/js/toc.js"></script>
+</body>
+</html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.style.display = 'block';
+});
+</script>
+

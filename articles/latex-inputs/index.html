@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/images/pfp.jpeg" type="image/jpeg">
+    <title>The quickest way to add and manage screenshots in LaTeX</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/article.css">
+    <link rel="stylesheet" href="/static/syntax/prism.css">
+
+</head>
+<body>
+<div id="toc" class="toc-container"></div>
+    <div class="blog-container">
+        <div class="blog-header">
+            <a href="/" class="home-link"><i class="fas fa-arrow-left"></i> Home </a>
+            <span class="blog-info">08 september 2024 | 5 min read</span>
+        </div>
+        <hr>
+        <h1>The quickest way to add and manage screenshots in LaTeX </h1>
+	<p> 
+	<em>
+		Recently I found myself trying to categorise and order every exam question of a subject for the past five years. A rather tedious - and stupid - undertaking. It would've been impossibly slow had it not been for my screenshot setup.
+	</em>
+	</p>
+<video class="big-video" autoplay loop muted playsinline preload="metadata">
+<source src="/static/videos/article2-demo.mp4" type="video/mp4">
+    Your browser does not support this video tag.
+</video>
+
+	<p> 
+		In essence, we'll first write a script that places a screenshot in the desired directory. We do this using symlinks. Then we define a snippet function to paste this screenshot in an intelligent way. 
+		The idea is almost too simple to write about, but the snippet
+		function was quite creative. I couldn't find anyone else doing this, so I figured this might be cool to write about.
+	</p>
+
+	<h2 id="takingshots">Taking shots</h2>
+<p> 
+Let's first discuss taking the screenshot. This entails making a script,
+binding a key to it, keeping it in the right place.
+</p>
+
+	<h3 id="script">Script</h3>
+	<p> 
+	Let's first write the script for taking the screenshot. I have written a script <span class="highl">~/.local/bin/vl-ss.sh</span> -- where vl is supposed to mean vimlatex.
+	</p>
+	<pre><code class="language-bash">
+#!/bin/bash
+
+# Directory that has the symlink
+base_dir=~/school/
+
+# Checking symlink
+if [ ! -L "$base_dir/current-subject" ]; then
+    echo "Symlink not configured correctly"
+    exit 1
+fi
+
+# Getting symlink
+current_subject=$(readlink -f $base_dir/current-subject)
+
+# Checking 'images' folder
+if [ ! -d "$current_subject/images" ]; then
+    mkdir -p "$current_subject/images"
+    echo "Images folder didn't exist, now it does!"
+fi
+
+# filename
+datetime=$(date '+%Y-%m-%d_%H-%M-%S')
+filename="$current_subject/images/screenshot_$datetime.png"
+
+# taking ss
+flameshot gui -p "$filename"
+	</code></pre>	
+	<p> 
+		Make sure it's executable <span class="highl">chmod +x ~/.local/bin/vl-ss.sh</span>. Notice that a very specific time is used for the filename. This will become important later when we write a function finding the screenshot that was taken last. 
+	</p>
+	<p> 
+		I should also mention my choice of screenshotting program; flameshot. It can be installed on any linux distro and is in the AUR helper. I found this by far the best option for what I'm doing here! 
+	</p>
+	<h3 id="symlinks">Symlinks</h3>
+	<p> 
+		It's important to notice I work with a base directory and a symlink so as to use the same technique in different subfolders to my <span class="highl">~/school</span> folder. If you want to use this in a single file, <span class="underl">no need for symlinks</span>. <span class="underl">Change the code to only use a base directory.</span> 
+	</p>
+	<p> 
+	Now let's go on to talk about this symlink, and the idea behind it.
+	It's meant to be used for situatinos where you want the images in a variable place.
+	Define them in your base directory to go to your desired directory. This could be done manually, or with scripts. I might later update this post to talk about automating symlink updates.
+	</p>
+	<p> 
+		In my video example, the symlink was created as;
+		<pre><code class="language-bash">
+ln -s ~/school/year/semester/subject ~/school/current-subject
+		</code></pre>
+	</p>
+	<h3 id="binding">Binding</h3>
+	<p> 
+	We have a way of taking and naming the screenshot. Now we shall bind it to a key. This is obviously going to work very differently for different window managers. I use DWM, and so I will demonstrate how it's done for DWM.
+	</p>
+	<p> 
+		In your <span class="highl">~/path/to/dwm/config.h</span> 
+		<pre><code class="language-bash">
+static const Key keys[] = {
+		...
+	{ 0, 0xffc3, 			spawn, 		SHCMD("/home/user/.local/bin/vl-ss.sh") },
+		...	
+};
+		</code></pre>
+	</p>
+	<p> 
+		Where you should change <span class="highl">user</span> to your username. 
+	</p>
+	<p> 
+		As you see, I bound it to a rather weird key. It will look different if you'd bind it to a normal key. Don't blindly copy this. You can use a command like <span class="highl">xev | grep 'keycode'</span> for information aout the key you'll use. 
+		This part is so very specific to your system, it'd be ridiculous to go into great detail. 
+	</p>
+	<p> 
+		To conclude this section; make sure you have a working script that will put screenshots in your directory of choice -- defined absolutely or with symlinks -- and a key bound to the script. 
+	</p>
+
+	<h2 id="snippetdefinition">A snippet</h2>
+	<p> 
+	Lots of troubleshooting went into the following code. I'll assume you're using ultisnips snippet-engine with standard configuration. In <span class="highl">~/.vim/UltiSnips/tex.snippets</span> add the following function;
+	</p>
+
+	<pre><code class="language-python">
+global !p
+import os
+import datetime
+
+def create_latex_figure(base_path, scalefac="1"):
+    full_path = os.path.realpath(os.path.expanduser(base_path))
+    files = [os.path.join(full_path, f) for f in os.listdir(full_path) if os.path.isfile(os.path.join(full_path, f))]
+    latest_file = max(files, key=os.path.getctime)
+    original_name = os.path.basename(latest_file)
+    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    if "_" + timestamp not in original_name:
+        new_filename = f"{os.path.splitext(original_name)[0]}_{timestamp}.png"
+        os.rename(latest_file, os.path.join(full_path, new_filename))
+    else:
+        new_filename = original_name
+
+    figure = f"""
+\\begin{{figure}}[H]
+\\centering
+\\includegraphics[width=\\linewidth/{scalefac}]{{"{os.path.join(full_path, new_filename)}"}}
+\\end{{figure}}
+"""
+    return figure
+endglobal
+	</code></pre>
+	<p> 
+		As you see, I wrote it so that an extra timestamp is added when this code is triggered. This solved a problem I had where making a lot of screenshots in a row threw a mysterious recursion error. 
+	</p>
+	<p> 
+		To then use this function, define the following snippet;
+		<pre><code class="language-bash">
+snippet ssp "Screenshot paste" bA
+`!p
+snip.rv = create_latex_figure("~/school/current-subject/images")
+`
+endsnippet
+		</code></pre>
+		</p>
+		<p> 
+		I use <span class="highl">ssp</span> for normal images. For small images I use <span class="highl">sss</span>.
+		</p>
+		<pre><code class="language-bash">
+snippet sss "small screenshot" bA
+`!p
+snip.rv = create_latex_figure("~/school/jaar/semester/vak/images", "3")
+`
+endsnippet
+		</code></pre>
+		<p> 
+		Here you see I made a scalefactor of three. This should now work without any issues.
+		</p>
+	</p>
+	<div style="padding: 10px;"></div>
+	<p class="wit-kader"> 
+		One problem that I thought not to be solveable; I wanted to have a snippet where you could have input choose the scaling factor. I could not get this to work. I'll leave it as a challenge for the reader!  
+	</p>
+
+
+	<div style="padding-bottom: 100px;"></div>
+    <script src="/static/syntax/prism.js"></script>
+    <script src="/static/js/toc.js"></script>
+</body>
+</html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.style.display = 'block';
+});
+</script>
+

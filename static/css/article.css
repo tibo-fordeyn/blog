@@ -1,0 +1,502 @@
+/* Basisstijl voor de gehele pagina */
+@font-face {
+    font-family: 'FiraCodeNerdFont';
+    src: url('/static/fonts/FiraCode-Regular.woff2') format('woff2'),
+         url('/static/fonts/FiraCode-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #0D1B2A;
+    color: white;
+    font-size: 21px;
+}
+
+/* Fade-in effect */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.blog-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.blog-header {
+    background-color: #1B263B;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.blog-info, .home-link {
+    font-style: normal !important;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    color: #DDDDDD !important;
+}
+
+.home-link {
+    font-style: normal !important;
+    text-decoration: none;
+    align-items: center;
+}
+
+.home-link i {
+    font-style: normal !important;
+    margin-right: 10px;
+}
+
+h1 {
+    font-size: 38px;
+    width: 70%; /* Herstelde breedte voor de titel */
+    margin: 0 auto 25px auto;
+    text-align: center;
+    padding: 0 20px; /* Extra padding voor de titel */
+}
+
+video {
+    width: calc(130% + 40px);    /* lijn 1: breedte van de video */
+    margin: 20px -136.5px;       /* lijn 2: marge voor positionering */
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.4);  /* lijn 3: schaduw toevoegen */
+}
+
+
+p {
+    line-height: 1.6;
+    margin: 10px 0;
+    padding: 0 20px;
+    text-align: left;
+}
+
+p:first-of-type {
+    font-weight: bold;
+    color: #CCCCCC;
+}
+
+h2 {
+    font-size: 28px;
+    color: #EAECEE;
+    margin-top: 20px;
+    padding: 0 0px;
+    text-align: center;
+    position: relative; /* Nodig voor positionering van pseudo-element */
+    padding-bottom: 10px; /* Extra ruimte voor de decoratieve lijn */
+}
+
+h3 {
+    font-size: 22px; /* Middelgrote titel */
+    color: #0099CC; /* Blauwe kleur voor h3 titels */
+    margin-top: 30px;
+    padding: 0 40px; /* Iets meer naar links uitgelijnd dan h2 */
+    text-align: left;
+}
+
+h4 {
+    font-size: 18px; /* Kleinste titel */
+    color: #EAECEE;
+    margin-top: 30px;
+    padding: 0 60px; /* Meer naar links uitgelijnd dan h3 */
+    text-align: left;
+    border-left: 5px solid #0099CC; /* Verticale blauwe lijn voor visuele distinctie */
+}
+
+hr {
+    display: none;
+}
+
+.wit-kader {
+    border: 1px solid white;
+    padding: 10px;
+}
+
+
+/* Responsieve styling voor verschillende schermgroottes */
+@media (max-width: 1500px) {
+    body, html {
+        font-size: 19px;
+    }
+    h1 {
+        font-size: 34px;
+    }
+    h2 {
+        font-size: 24px;
+    }
+    h3 {
+        font-size: 20px;
+    }
+    h4 {
+        font-size: 18px;
+    }
+
+    /*
+      Als je wilt dat de TOC geheel verdwijnt onder 1200px breedte:
+      Gebruik !important, zodat het inline-styles overschrijft
+      (als die er ooit mochten komen).
+    */
+    #toc {
+        display: none !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .blog-container {
+        padding: 15px;
+    }
+    h1, p, h2, h3 {
+        padding: 0 15px;
+    }
+    body, html {
+        font-size: 18px;
+    }
+    h1 {
+        font-size: 32px;
+    }
+    h2 {
+        font-size: 22px;
+    }
+    h3 {
+        font-size: 18px;
+    }
+    .blog-header {
+        padding: 10px;
+    }
+    .blog-info, .home-link {
+        font-size: 13px;
+    }
+    p {
+        font-size: 17px;
+    }
+}
+
+@media (max-width: 768px) {
+    body, html {
+        font-size: 16px;
+    }
+    h1 {
+        font-size: 28px;
+    }
+    h2 {
+        font-size: 20px;
+    }
+    h3 {
+        font-size: 16px;
+    }
+    .blog-header {
+        flex-direction: column; /* Stapel items onder elkaar */
+        align-items: flex-start;
+    }
+    .home-link {
+        margin-bottom: 10px; /* Ruimte tussen de link en de datum */
+    }
+    .blog-info, .home-link {
+        font-size: 12px;
+    }
+    p {
+        font-size: 15px;
+    }
+    video {
+        width: 100%; /* Video past zich aan aan schermbreedte */
+        margin: 20px 0;
+    }
+}
+
+@media (max-width: 576px) {
+    body, html {
+        font-size: 14px;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    h2 {
+        font-size: 18px;
+    }
+    h3 {
+        font-size: 14px;
+    }
+    p {
+        font-size: 14px;
+    }
+    .blog-info, .home-link {
+        font-size: 11px;
+    }
+    #toc {
+        display: none !important; /* Verberg TOC op zeer kleine schermen */
+    }
+}
+
+/*LIJSTEN*/
+/* Algemene stijl voor onderlijnde tekst */
+.underl {
+    color: inherit; /* Houd de tekstkleur hetzelfde als de omgeving */
+    text-decoration: underline; /* Voeg een onderlijning toe */
+    text-decoration-color: #163d57;
+    text-decoration-thickness: 1px; /* Maak de onderlijning iets dikker */
+    text-underline-offset: 3px; /* Geef wat ruimte tussen de tekst en de lijn */
+}
+
+
+/* Specifieke stijl voor ongenummerde lijsten (ul) */
+ul {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+ul li::before {
+    content: "➤";
+    color: rgba(255, 255, 255, 0.6);
+    margin-right: 10px;
+    font-size: 0.9em;
+    vertical-align: middle;
+}
+
+/* Stijlen voor genummerde lijsten (ol) */
+ol {
+    list-style: none;
+    counter-reset: section;
+    padding-left: 0;
+}
+
+ol li {
+    counter-increment: section;
+    margin-bottom: 15px;
+    position: relative;
+    padding-left: 50px;
+}
+
+ol li::before {
+    content: counter(section);
+    background-color: rgba(22, 61, 87, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(22, 61, 87, 0.6);
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* Aanpassingen voor genummerde lijsten op kleine schermen */
+@media (max-width: 576px) {
+    ol li {
+        padding-left: 40px;
+    }
+    ol li::before {
+        width: 25px;
+        height: 25px;
+        font-size: 16px;
+    }
+}
+
+/* Algemeen lijstitem gedrag */
+ul li, ol li {
+    line-height: 1.4;
+    font-family: inherit;
+    margin-bottom: 8px;
+}
+
+.marked-text {
+    background-color: #163d57;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+    display: inline-block;
+}
+
+.highl {
+    background-color: rgba(22, 61, 87, 0.2);
+    color: #b0c4de;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+    display: inline;
+}
+
+a {
+    color: #1ef5fe; /* Lichtblauwe kleur */
+    text-decoration: none; /* Geen standaard onderlijning */
+    font-style: italic; /* Schuingedrukt */
+    font-weight: 570; /* Iets vetter dan normaal */
+    transition: color 0.3s ease; /* Soepele overgang voor hover-effect */
+}
+
+a:hover {
+    color: #FFFFFF; /* Tekst wordt wit bij hover */
+}
+
+
+/*CODE KADERS EN SYNTAX HIGHLIGHTS*/
+pre {
+    background-color: #163d57 !important;
+    color: #e1f5fe !important;
+    padding: 10px 20px !important;
+    border: none !important;
+    border-radius: 5px !important;
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+    overflow: auto !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+code {
+    display: block !important;
+    color: inherit !important;
+    overflow-x: auto !important;
+    font-family: 'FiraCodeNerdFont', monospace !important;
+}
+
+/* Aanpassingen voor codeblokken op kleine schermen */
+@media (max-width: 576px) {
+    pre {
+        font-size: 14px !important;
+        padding: 8px 15px !important;
+    }
+}
+
+/* CODE VOOR DIRECTORY STRUCTUUR*/
+.directory-structure {
+    font-family: 'Courier New', monospace;
+    line-height: 1.6;
+    margin-left: 20px;
+}
+
+.directory-structure ul {
+    padding-left: 20px;
+    position: relative;
+}
+
+.directory-structure li {
+    margin: 5px 0;
+    position: relative;
+    padding-left: 20px;
+}
+
+.directory-structure li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 1px;
+    background: #888;
+}
+
+.directory-structure li::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 20px;
+    height: 1px;
+    background: #888;
+}
+
+.directory-structure li:last-child::before {
+    height: 50%;
+}
+
+/* Icoonstijlen */
+.directory-structure .dir:before,
+.directory-structure .file:before {
+    content: '\f07c';
+    font-family: FontAwesome;
+    position: absolute;
+    left: -25px;
+    top: -2px;
+    color: #007BFF;
+}
+
+.directory-structure .file:before {
+    content: '\f15b';
+    color: #555;
+}
+
+/* Aanpassingen voor directory structuur op kleine schermen */
+@media (max-width: 576px) {
+    .directory-structure {
+        margin-left: 10px;
+    }
+    .directory-structure li {
+        padding-left: 15px;
+    }
+    .directory-structure li::after {
+        width: 15px;
+    }
+}
+
+/* INHOUDSOPGAVE CSS */
+#toc {
+    /* Door hier 'display: block' te zetten, is de TOC standaard zichtbaar
+       tenzij er een @media-regel is (1200px/768px/576px) die hem verbergt.
+    */
+    position: sticky;
+    top: 100px;
+    max-height: 70vh;
+    overflow-y: auto;
+    display: block;
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+    font-size: 16px;
+    background: transparent;
+    z-index: 1000;
+    margin-left: 20px;
+}
+
+#toc a {
+    text-decoration: none;
+    font-family: 'Courier New', Courier, monospace;
+    display: block;
+    padding: 5px 10px;
+    color: white;
+    font-size: 16px;
+}
+
+#toc a.active,
+#toc a:hover {
+    margin-left: 10px;
+    font-size: 19px !important;
+    font-weight: bold;
+    border-left: 2px solid white;
+}
+
+/* Stijlen voor subhoofdstukken (h3) */
+#toc a.h3 {
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+#toc a.h3.active {
+    font-size: 17px !important;
+    font-weight: bold;
+}
+
+/* 
+   @media (max-width: 768px) verbergt de TOC sowieso, 
+   dus bovenin staat al 1200px. 
+   Hier nog eens, specifiek voor <768px:
+*/
+@media (max-width: 768px) {
+    #toc {
+        display: none !important;
+    }
+}

@@ -1,0 +1,168 @@
+/* Algemene stijlen voor grote schermen (desktop) */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #0D1B2A; /* Donkerblauwe achtergrond voor de hele pagina */
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    overflow-x: hidden; /* Verberg horizontaal scrollen */
+}
+
+/* Profielfoto stijlen */
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    object-fit: cover; /* Zorgt ervoor dat de afbeelding wordt bijgesneden als deze niet de juiste verhouding heeft */
+    border-radius: 50%; /* Maakt de afbeelding cirkelvormig, optioneel */
+}
+
+/* Container stijlen */
+.container {
+    display: flex;
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto; /* Centreert de container op de pagina */
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #0D1B2A;
+    box-sizing: border-box;
+    gap: 30px; /* Voeg meer ruimte toe tussen de sidebar en de main-content */
+}
+
+/* Sidebar stijlen */
+.sidebar {
+    background-color: #1B263B;
+    width: 30%; /* Sidebar neemt 30% van de breedte van het scherm in */
+    padding: 15px 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Sidebar tekststijlen */
+.sidebar h3, .sidebar p {
+    margin: 5px 0; /* Minder ruimte tussen de teksten */
+    text-align: center;
+}
+
+/* Stijlen voor de links in de sidebar */
+.sidebar ul {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.sidebar ul li {
+    margin: 5px 0; /* Minder ruimte tussen de links */
+}
+
+/* Centrer de links in de sidebar */
+.sidebar ul li a {
+    display: block;
+    text-align: center;
+    padding: 8px 12px;
+    width: 100%;
+}
+
+/* Hoofdinhoud stijlen */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Artikel stijlen */
+.article {
+    /*background-color: #1B263B;*/
+    background-color: #0D1B2A; /* Donkerblauwe achtergrond voor de hele pagina */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.article:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    background-color: #1B263B;
+}
+
+.article:hover em {
+    text-decoration: underline; /* Onderstreep alleen bij hover van het hele artikel */
+}
+
+/* Link stijlen */
+a {
+    color: white;
+    text-decoration: none;
+    background-color: #2C3E50;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+a:hover {
+    background-color: #34495E;
+}
+
+/* Stijlen voor kleinere schermen vanaf 1024px */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column; /* Zet de items onder elkaar */
+        align-items: center; /* Centreer de items */
+        padding: 15px;
+        gap: 20px; /* Voeg iets minder ruimte toe tussen sidebar en content */
+    }
+
+    .sidebar {
+        width: 80%; /* Sidebar neemt 80% van de breedte in */
+        margin-bottom: 20px;
+        box-shadow: none;
+    }
+    .main-content {
+        width: 90%; /* Hoofdinhoud neemt 90% van de breedte in */
+    }
+}
+
+/* Stijlen voor mobiele schermen */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 90%; /* Sidebar neemt 90% van de breedte in */
+        text-align: center;
+    }
+    .main-content {
+        width: 100%; /* Hoofdinhoud neemt volledige breedte in */
+    }
+
+    .article {
+        width: 100%;
+        padding: 10px; /* Iets kleinere padding om ruimte te besparen */
+    }
+
+    img.profile-photo {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+    }
+
+    h3 {
+        font-size: 1.2em;
+    }
+
+    /* Beperk de tekstlengte van de artikelen op mobiele schermen */
+    .article .description {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Toon maximaal 3 lijnen */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}

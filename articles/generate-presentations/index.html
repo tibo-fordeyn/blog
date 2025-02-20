@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/images/pfp.jpeg" type="image/jpeg">
+    <title>How to use Vimwiki-Markdown and Pandoc to generate presentations from notes on the fly</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/article.css">
+    <link rel="stylesheet" href="/static/syntax/prism.css">
+
+</head>
+<body>
+	<div id="toc" class="toc-container"></div>
+    <div class="blog-container">
+        <div class="blog-header">
+            <a href="/" class="home-link"><i class="fas fa-arrow-left"></i> Home </a>
+            <span class="blog-info">12 april 2024 | 10 min read</span>
+        </div>
+        <hr>
+        <h1>Utilising Vimwiki - Markdown - Pandoc to instantly generate presentations from notes</h1>
+        <p>
+            <em>
+	    A while back I had an internship for which some research needed to be done. 
+	    During that time I was taking notes with Vimwiki. When a meeting was spontaneously scheduled, I needed to present my findings clearly.
+            Therefore, I wrote some scripts and changed some configs to get the small technique written here to work. 
+	    It is my goal for this to be useful to someone in a similar position, or to someone who might take inspiration from the way these configs are written.
+	    </em>
+        </p>
+        <p>
+
+<video class="big-video" autoplay loop muted playsinline preload="metadata">
+    <source src="/static/videos/article1-demo.mp4" type="video/mp4">
+    Your browser does not support this video tag.
+</video>
+
+
+	In practice, you write your notes in Vimwiki, incorporating the markdown extension - and snippets. Then with some keybinds you can easily turn them into a presentation instantly.
+        </p>
+        <h2 id="prerequisites">Prerequisites</h2>
+	To make sure you won't experience too much trouble, I'll list all the programs used for this post.
+	<ul>
+		<li> <span class="marked-text">Vim</span> (+ some vim-plugins that will be discussed)</li>
+		<li> <span class="marked-text">Markdown</span> </li>
+		<li>  <span class="marked-text">Pandoc</span></li>
+		<li>  <span class="marked-text">Mupdf</span> as the quick and lightweight pdf viewer of choice</li>
+		<li> <span class="marked-text">pdflatex</span></li>
+	</ul>
+        <h2 id="vimwiki">Vimwiki</h2>
+	<p>
+    Vimwiki is a tool used for keeping personal notes. <span class="underl">It's essentially just writing a file in vim, but with extra functionality</span> which allows you to create file hierarchies and navigate through these hierarchies quickly.
+    Let's first install Vimwiki by adding the plugin to your <span class="highl">vimrc</span>, assuming you're using vim-plug;
+    <pre><code class="language-vim">
+call plug#begin('~/.vim/plugged')
+...
+Plug 'vimwiki/vimwiki'
+...
+call plug#end()
+    </code></pre>
+    <p> 
+    If you're new to using vim-plug, find all of your information on <a href="https://github.com/junegunn/vim-plug" target="_blank">their GitHub page</a>.
+    Here are the only Vimwiki keybinds you need to familiarise with for using it:
+    	 
+    </p>
+</p>
+<ul>
+    <li><span class="marked-text">Enter on word</span> -- creates a wiki on this word</li>
+    <li><span class="marked-text">Enter on a wiki</span> -- navigates to that wiki</li>
+    <li><span class="marked-text">Ctrl + o</span> -- moves to previous wiki</li>
+    <li><span class="marked-text">Ctrl + i</span> -- toggles wikis in a file</li>
+</ul>
+
+<p>
+You can see how this could be very useful for going deep into a subject. However, there are some things that I consider indispensable for really using it. Here is the config code in my <span class="highl">vimrc</span>, which I will explain in what follows.
+</p>
+
+            <pre><code class="language-vim">
+let g:vimwiki_list = [
+\ {
+\   'path': '~/dl/notebooks/',
+\   'index': 'index',
+\   'syntax':'markdown',
+\   'ext': '.md',
+\   'auto_export': 0,
+\   'template_path': '~/dl/notebooks/',
+\   'template_default': 'default',
+\   'template_ext': '.tpl',
+\   'nested_syntaxes': {'python': 'python', 'bash': 'sh'},
+\   'diary_rel_path': 'journal/',
+\   'diary_index': 'index'
+\ }
+\ ]
+map <leader>wi :VimwikiIndex&lt;CR&gt;
+set conceallevel=1
+            </code></pre>
+        </p>
+	<p> 
+           You can see I defined the <span class="highl">~/dl/notebooks</span> directory as a starting directory. It's bound to <span class="highl">leader wi</span>. You can pick any directory, and obviously multiple directories, to configure accordingly. The default filetype is set to markdown here.  The <span class="highl">set conceallevel=1</span> will make your markdown files easier to look at; it will conceal ugly syntax. 
+	</p>
+        <p>
+	If you're not very familiar with what this all means, I'll refer you to <a href="https://vimdoc.sourceforge.net/htmldoc/options.html" target="_blank">the vim documentation</a>. Don't get intimidated! It's very simple.
+        </p>
+        <p>
+            I should mention that by default wikis will be created in the same directory. By using <span class="highl">folder/wikiname</span> on words you enter, your wiki will exist in a subfolder. This keeps order. In my example video, my folder looks like this:
+	    <div class="directory-structure">
+    <ul>
+        <li class="dir">~/dl/notebooks
+            <ul>
+                <li class="file">index.md</li>
+                <li class="dir">Newton
+                    <ul>
+                        <li class="file">Newton.md</li>
+                        <li class="file">binonium.md</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+
+        </p>
+        <p>
+	If you're new to vim, you can also use my full config file on my GitHub. Learn to use it before setting this up. For more info, see <a href="https://github.com/vimwiki/vimwiki" target="_blank">the official Vimwiki GitHub</a>.
+        </p>
+        <h2 id="markdown">Markdown</h2>
+	<h3 id="snippets">Snippets</h3>
+        <p>
+            To make markdown lightning fast, snippets are used. Before discussing how they work, I'll show you how to configure them. We need the following plugins now:
+    <pre><code class="language-vim">
+call plug#begin('~/.vim/plugged')
+...
+Plug 'vimwiki/vimwiki' " as discussed prior
+Plug 'SirVer/ultisnips' 
+Plug 'honza/vim-snippets'
+Plug 'lervag/vimtex' 
+Plug 'godlygeek/tabular'
+Plug 'preservim/vim-markdown' 
+...
+call plug#end()
+    </code></pre>
+    <p> 
+    	Where ultisnips is the snippet-engine. It makes everything work. Vim-snippets is a set of snippets, so you don't have to create all of them yourself. Vimtex is used for LaTeX compiling with vim and more, but we will use it for our math-mode compilation. Lastly tabular and vim-markdown are just used so that markdown features will be naturally integrated.
+    </p>
+    <p> 
+    	These are the configurations to go along with the snippet-engine;
+	<pre><code class="language-vim">
+let g:UltiSnipsExpandTrigger="&lt;tab&gt;"
+let g:UltiSnipsJumpForwardTrigger="&lt;tab&gt;"
+let g:UltiSnipsJumpBackwardTrigger="&lt;c-z&gt;"
+let g:UltiSnipsSnippetDirectories=["UltiSnips","Snippets"]
+let g:UltiSnipsEditSplit="vertical"
+	</code></pre>
+    </p>
+        <p>
+            By default, the <span class="highl">tab</span> trigger will not work for markdown. Add the following lines to your vimrc to fix this;
+            <pre><code class="language-vim">
+autocmd FileType vimwiki UltiSnipsAddFiletypes markdown
+au filetype vimwiki silent! iunmap &lt;buffer&gt; &lt;Tab&gt;
+autocmd FileType vimwiki set filetype=markdown
+            </code></pre>
+        </p>
+<p> 
+	    The snippets are kept in <span class="highl">~/.vim/UltiSnips/markdown.snippets</span>.
+	<p> 
+	    Here's a snippet example that was used in the demo-vieo:
+	</p>
+            <pre><code class="language-bash custom-code">
+snippet inf "Info for new wiki" b
+---
+${1:title: "$2"}
+${3:author: "$4"}
+${5:date: "$6"}
+---
+$7
+endsnippet
+            </code></pre>
+        </p>
+        <p>
+            A snippet works as a way to turn any combination of symbols into something you defined. 
+	    They're written in the aforementioned file. Let's go over the syntax and the workings of this snippet line by line. 
+
+	    <p> 
+    To start a definition, the syntax goes 
+    <pre><code class="language-bash">
+snippet word "discription of snippet" behaviour
+    </code></pre>
+	    <p> 
+    	where "snippet" is standard syntax. The "word" is what will expand when typed. Behaviour will determine how it will expand. There's three important options to know when it comes to behaviour; 
+	<ol>
+    <li><span class="highl">b</span> will make it so that the expansion will only happen if the trigger is typed at the beginning of the line.</li>
+    <li><span class="highl">i</span> will make it so that the expansion will happen at any place, and is therefore more general than <span class="highl">b</span></li>
+    <li>There is an option to use <span class="highl">A</span> for auto-expansion, <span class="underl">if you don't use A, you will have to use an expansion-trigger</span>. Generally, <span class="highl">Tab</span> is used for this.</li>
+	</ol>
+	    </p>
+	    <p> 
+	    In between the "snippet" "endsnippet" lines, anything can be written. The <span class="highl">$i</span> determines where your keyboard will focus and in which order! You can write a standard response by using <span class="highl">${i: text}</span> that you can replace, or keep by tabbing over it. I hope my video, where I use this <span class="highl">inf</span> snippet makes things clear.
+	    </p>
+        <p>
+            In this case, you see how it gives you the ability to easily make your filetags. And you can do so much more; for my LaTeX snippets I have one snippet which includes an entire template. From there I just put my <span class="highl">$</span> signs in the right place. It's very powerful.
+        </p>
+	<h3 id="Math mode">Math mode</h3>
+        <p>
+            Let's now discuss how I defined math mode within my markdown.snippets file, and the vimrc. This makes snippets that only expand when you're writing mathematics. Make sure to have the vimtex plugin for this. Write the following code at the top of your <span class="highl">~/.vim/UltiSnips/markdown.snippets</span> file.
+            <pre><code class="language-bash custom-code">
+global !p
+def math():
+    return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+endglobal
+            </code></pre>
+        </p>
+	<p> 
+		Then add the following line to your <span class="highl">vimrc</span>:
+		<pre><code class="language-vim">
+let g:vim_markdown_math = 1
+		</code></pre>
+	</p>
+	<p> 
+		To go into math mode, we use <span class="highl">dm</span> and <span class="highl">mk</span>, which I use because of <a href="https://castel.dev/post/lecture-notes-1/" target="_blank">Gilles Castel</a> his amazinig blog post. Define them accordingly in your <span class="highl">markdown.snippets</span> file;
+		<pre><code class="language-vim">
+snippet dm "Display Math Mode" bA
+\$\$
+${1:math}
+\$\$$0
+endsnippet
+		</code></pre>
+	</p>
+	<p> 
+	this "display math" snippet will be used for mathematics that is on a new line. As apposed to; 
+		<pre><code class="language-bash">
+snippet mk "Inline Math Mode" i 
+\$${1:math}\$$0
+endsnippet
+		</code></pre>
+	</p>
+	<p> 
+		which is used for inline mathematics. 
+	</p>
+        <p>
+            Here's a snippet -- also used in the demo -- that is only defined in math mode. <span class="underl">This snippet will only be activated when in a "math" environment</span>, which means within the <span class="highl">$</span> signs.
+            <pre><code class="language-bash custom-code">
+context "math()"
+snippet sum "som" iA
+\sum_{k=$1}^{$2} $3 
+endsnippet
+            </code></pre>
+        </p>
+	<p> 
+		If you are in need of more info on snippets, or if you want a plethora of math mode snippets, I'll direct you to <a href="https://castel.dev/post/lecture-notes-1/" target="_blank">Gilles Castel's blog post on the matter</a> and <a href="https://github.com/gillescastel/latex-snippets" target="_blank">his snippets</a> respectively. Those are more clever than what I could come up with. 
+	</p>
+        <h2 id="pandoc">Pandoc</h2>
+        <p>
+            Pandoc is a very extensible program. We will use it to convert our markdown files to presentations. Converting markdown to presentation PDF happens with the following <span class="underl">general</span> command:
+            <pre><code class="language-bash custom-code">
+$ pandoc input.md -t beamer -V theme=theme -V colortheme=colortheme -o output.pdf
+            </code></pre>
+        </p>
+        <p>
+            The <span class="highl">-t beamer</span> option is what we use to indicate we want a presentation. After -V theme and colortheme we can pick a theme. Here is the example command I use:
+            <pre><code class="language-bash custom-code">
+$ pandoc Newton.md -t beamer -V theme=Singapore -V colortheme=albatross -o Newton.pdf
+            </code></pre>
+        </p>
+        <p>
+            As you see I always use the Singapore theme and albatross colortheme. All of the availables are on <a href="https://hartwork.org/beamer-theme-matrix/" target="_blank">this cool website</a>, they're great! You could make your own themes as well. Try not to take it too far!
+        </p>
+        <h2 id="automating">Automating</h2>
+        <p>
+            At last, it can all be tied together by writing a simple script which generates the presentations in an instant.
+            <pre><code class="language-bash custom-code">
+#!/bin/bash
+
+# the %p option in the vimrc should give the path!
+if [ -z "$1" ]; then
+  echo "Error: No file path provided, check your vimrc definition"
+  exit 1
+fi
+
+# Get the full file path
+fullpath=$1
+
+# Extract file name and directory from the full path
+filename=$(basename -- "$fullpath")
+dirname=$(dirname -- "$fullpath")
+basefilename="${filename%.*}"
+
+cd "$dirname" || exit
+
+# Convert Markdown to PDF using Pandoc
+pandoc "$filename" -t beamer -V theme=Singapore -V colortheme=albatross -o "$basefilename.pdf"
+
+# Check if PDF was successfully generated
+if [ -f "$basefilename.pdf" ]; then
+  echo "Presentation generated: $basefilename.pdf"
+  # Opening the file with MuPDF with standard zoom of 350
+  mupdf -r 350 "$basefilename.pdf" &
+else
+  echo "Error generating presentation."
+  exit 2
+fi
+            </code></pre>
+	    <p> 
+	    	Save this script in <span class="highl">~/.local/bin</span> as <span class="highl">generate_presentation.sh</span>. Make it executable by running <span class="highl">chmod +x generate_presentation.sh</span>. Finally add the following line to your vimrc: 
+	    </p>
+            <pre><code class="language-bash custom-code">
+nnoremap <Leader>pg :silent !/home/user/.local/bin/generate_presentation.sh %:p&lt;CR&gt;:silent! redraw! &lt;CR&gt;
+            </code></pre>
+        </p>
+        <p>
+	Change <span class="highl">user</span> with your username.
+            This will activate the script with the <span class="highl">leader pg</span> key combination. The <span class="highl">:silent !..</span> option will make it so that you won't be plagued with outputs. The <span class="highl">%p</span> option will give the script the name of the file and directory you're working in. <span class="underl">This would work with any markdown file</span>, but here we'll use it with our Vimwiki-Markdown files.
+        </p>
+        <p>
+            As you can see, I use mupdf viewer to show me the presentation. This is a very lightweight and easy to use viewer for powerpoints or other pdfs. Perfect for our task! the <span class="highl">-r 350</span> option creates a standard zoom. Using <span class="highl">H</span> when in the presentation sets it right for your client resolution according to height.
+        </p>
+	<p class="wit-kader"> I have tested this code in a virtual machine and concluded this works as intended. If you have any questions, feel free to contact me.
+	</p>
+	<div style="padding-bottom: 100px;"></div>
+    </div>
+    <script src="/static/syntax/prism.js"></script>
+    <script src="/static/js/toc.js"></script>
+</body>
+</html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.style.display = 'block';
+});
+</script>
