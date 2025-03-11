@@ -4,51 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/static/images/pfp.jpeg" type="image/jpeg">
-    <title>How to use Vimwiki-Markdown and Pandoc to generate presentations from notes on the fly</title>
+    <title>Creative productivity tricks on Linux with Vim and Pandoc</title>
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" href="/static/css/article.css">
     <link rel="stylesheet" href="/static/syntax/prism.css">
-
 </head>
 <body>
 	<div id="toc" class="toc-container"></div>
     <div class="blog-container">
         <div class="blog-header">
             <a href="/" class="home-link"><i class="fas fa-arrow-left"></i> Home </a>
-            <span class="blog-info">12 april 2024 | 10 min read</span>
+            <span class="blog-info">12 april 2024 | 15 min read</span>
         </div>
         <hr>
-        <h1>Utilising Vimwiki - Markdown - Pandoc to instantly generate presentations from notes</h1>
+        <h1>Creative productivity tricks on Linux with Vim and Pandoc</h1>
         <p>
             <em>
 	    A while back I had an internship for which some research needed to be done. 
-	    During that time I was taking notes with Vimwiki. When a meeting was spontaneously scheduled, I needed to present my findings clearly.
-            Therefore, I wrote some scripts and changed some configs to get the small technique written here to work. 
-	    It is my goal for this to be useful to someone in a similar position, or to someone who might take inspiration from the way these configs are written.
+	    During that time I was taking notes with Vimwiki. When a meeting was spontaneously scheduled, I needed to present my findings clearly. In this post I will demonstrate how to generate reports or presentations from notes on the fly. 
 	    </em>
         </p>
         <p>
 
 <video class="big-video" autoplay loop muted playsinline preload="metadata">
-    <source src="/static/videos/article1-demo.mp4" type="video/mp4">
+    <source src="/static/videos/article1/article1-demo.mp4" type="video/mp4">
     Your browser does not support this video tag.
 </video>
 
-
-	In practice, you write your notes in Vimwiki, incorporating the markdown extension - and snippets. Then with some keybinds you can easily turn them into a presentation instantly.
-        </p>
+        <p>
+<em>
+	I will also demonstrate a neat trick for storing random ideas or a diary.
+	And since this post is about productivity; at the end I'll quickly mention something unrelated that single-handedly made me healthier -- using newsboat with pi-hole.
+</em>
+        <p>
+	In practice, you write your notes in Vimwiki, incorporating the markdown extension - and snippets. Then with some keybinds you can easily turn them into a presentation or report.   
+	</p>
         <h2 id="prerequisites">Prerequisites</h2>
+	<p>
 	To make sure you won't experience too much trouble, I'll list all the programs used for this post.
 	<ul>
 		<li> <span class="marked-text">Vim</span> (+ some vim-plugins that will be discussed)</li>
 		<li> <span class="marked-text">Markdown</span> </li>
 		<li>  <span class="marked-text">Pandoc</span></li>
 		<li>  <span class="marked-text">Mupdf</span> as the quick and lightweight pdf viewer of choice</li>
+		<li>  <span class="marked-text">Zathura</span> as the pdf-viewer of choice
 		<li> <span class="marked-text">pdflatex</span></li>
 	</ul>
         <h2 id="vimwiki">Vimwiki</h2>
 	<p>
-    Vimwiki is a tool used for keeping personal notes. <span class="underl">It's essentially just writing a file in vim, but with extra functionality</span> which allows you to create file hierarchies and navigate through these hierarchies quickly.
+        <em>
+		If you are familiar with using Vimwiki and markdown: skip to the <a href="#scripting">Scripting</a> section.
+	</em>
+	<p>
+    Vimwiki is a tool used for keeping personal notes. <span class="underl">It's essentially just writing a file in vim, but with added functionality</span> which allows you to create file hierarchies and navigate through these hierarchies quickly.
     Let's first install Vimwiki by adding the plugin to your <span class="highl">vimrc</span>, assuming you're using vim-plug;
     <pre><code class="language-vim">
 call plug#begin('~/.vim/plugged')
@@ -71,23 +79,20 @@ call plug#end()
 </ul>
 
 <p>
-You can see how this could be very useful for going deep into a subject. However, there are some things that I consider indispensable for really using it. Here is the config code in my <span class="highl">vimrc</span>, which I will explain in what follows.
+You can see how this could be very useful for going deep into a subject or just keeping regular notes. However, there are some things that I consider indispensable for really using it. Here is the config code in my <span class="highl">vimrc</span>, which I will explain in what follows.
 </p>
 
             <pre><code class="language-vim">
 let g:vimwiki_list = [
 \ {
-\   'path': '~/dl/notebooks/',
+\   'path': '~/.../notebooks/',
 \   'index': 'index',
 \   'syntax':'markdown',
 \   'ext': '.md',
 \   'auto_export': 0,
-\   'template_path': '~/dl/notebooks/',
 \   'template_default': 'default',
 \   'template_ext': '.tpl',
 \   'nested_syntaxes': {'python': 'python', 'bash': 'sh'},
-\   'diary_rel_path': 'journal/',
-\   'diary_index': 'index'
 \ }
 \ ]
 map <leader>wi :VimwikiIndex&lt;CR&gt;
@@ -95,7 +100,7 @@ set conceallevel=1
             </code></pre>
         </p>
 	<p> 
-           You can see I defined the <span class="highl">~/dl/notebooks</span> directory as a starting directory. It's bound to <span class="highl">leader wi</span>. You can pick any directory, and obviously multiple directories, to configure accordingly. The default filetype is set to markdown here.  The <span class="highl">set conceallevel=1</span> will make your markdown files easier to look at; it will conceal ugly syntax. 
+           You can see I defined the <span class="highl">~/.../notebooks</span> directory as a starting directory. It's bound to <span class="highl">leader wi</span>. You can pick any directory, and obviously multiple directories, to configure accordingly. The default filetype is set to markdown here.  The <span class="highl">set conceallevel=1</span> will make your markdown files easier to look at; it will conceal ugly syntax. 
 	</p>
         <p>
 	If you're not very familiar with what this all means, I'll refer you to <a href="https://vimdoc.sourceforge.net/htmldoc/options.html" target="_blank">the vim documentation</a>. Don't get intimidated! It's very simple.
@@ -104,7 +109,7 @@ set conceallevel=1
             I should mention that by default wikis will be created in the same directory. By using <span class="highl">folder/wikiname</span> on words you enter, your wiki will exist in a subfolder. This keeps order. In my example video, my folder looks like this:
 	    <div class="directory-structure">
     <ul>
-        <li class="dir">~/dl/notebooks
+        <li class="dir">~/.../notebooks
             <ul>
                 <li class="file">index.md</li>
                 <li class="dir">Newton
@@ -121,7 +126,7 @@ set conceallevel=1
 
         </p>
         <p>
-	If you're new to vim, you can also use my full config file on my GitHub. Learn to use it before setting this up. For more info, see <a href="https://github.com/vimwiki/vimwiki" target="_blank">the official Vimwiki GitHub</a>.
+	If you'd want to use my Vim configurations, you can find my full config file on my GitHub. Learn to use it before setting this up. For more info, see <a href="https://github.com/vimwiki/vimwiki" target="_blank">the official Vimwiki GitHub</a>.
         </p>
         <h2 id="markdown">Markdown</h2>
 	<h3 id="snippets">Snippets</h3>
@@ -190,16 +195,18 @@ snippet word "discription of snippet" behaviour
 	<ol>
     <li><span class="highl">b</span> will make it so that the expansion will only happen if the trigger is typed at the beginning of the line.</li>
     <li><span class="highl">i</span> will make it so that the expansion will happen at any place, and is therefore more general than <span class="highl">b</span></li>
-    <li>There is an option to use <span class="highl">A</span> for auto-expansion, <span class="underl">if you don't use A, you will have to use an expansion-trigger</span>. Generally, <span class="highl">Tab</span> is used for this.</li>
+    <li>There is an option to use <span class="highl">A</span> for auto-expansion. <span class="underl">If you don't use A, you will have to use an expansion-trigger</span>. The <span class="highl">Tab</span> key is used for this.</li>
 	</ol>
 	    </p>
 	    <p> 
-	    In between the "snippet" "endsnippet" lines, anything can be written. The <span class="highl">$i</span> determines where your keyboard will focus and in which order! You can write a standard response by using <span class="highl">${i: text}</span> that you can replace, or keep by tabbing over it. I hope my video, where I use this <span class="highl">inf</span> snippet makes things clear.
+	    In between the "snippet" "endsnippet" lines, anything can be written. The <span class="highl">$i</span> determines where your keyboard will focus and in which order! You can write a standard response by using <span class="highl">${i: text}</span> that you can replace, or keep by tabbing over it. I hope my video, where I use this <span class="highl">inf</span> snippet, makes things clear.
 	    </p>
         <p>
             In this case, you see how it gives you the ability to easily make your filetags. And you can do so much more; for my LaTeX snippets I have one snippet which includes an entire template. From there I just put my <span class="highl">$</span> signs in the right place. It's very powerful.
         </p>
 	<h3 id="Math mode">Math mode</h3>
+        <p>
+	In case you won't ever be needing to put math in your notes, feel free to ignore this part.
         <p>
             Let's now discuss how I defined math mode within my markdown.snippets file, and the vimrc. This makes snippets that only expand when you're writing mathematics. Make sure to have the vimtex plugin for this. Write the following code at the top of your <span class="highl">~/.vim/UltiSnips/markdown.snippets</span> file.
             <pre><code class="language-bash custom-code">
@@ -246,7 +253,7 @@ endsnippet
             </code></pre>
         </p>
 	<p> 
-		If you are in need of more info on snippets, or if you want a plethora of math mode snippets, I'll direct you to <a href="https://castel.dev/post/lecture-notes-1/" target="_blank">Gilles Castel's blog post on the matter</a> and <a href="https://github.com/gillescastel/latex-snippets" target="_blank">his snippets</a> respectively. Those are more clever than what I could come up with. 
+		If you are in need of more info on snippets, or if you want a plethora of math mode snippets, I'll direct you to <a href="https://castel.dev/post/lecture-notes-1/" target="_blank">Gilles Castel's blog post on the matter</a> and <a href="https://github.com/gillescastel/latex-snippets" target="_blank">his snippets</a> respectively. They're more clever than what I could ever come up with. 
 	</p>
         <h2 id="pandoc">Pandoc</h2>
         <p>
@@ -264,15 +271,25 @@ $ pandoc Newton.md -t beamer -V theme=Singapore -V colortheme=albatross -o Newto
         <p>
             As you see I always use the Singapore theme and albatross colortheme. All of the availables are on <a href="https://hartwork.org/beamer-theme-matrix/" target="_blank">this cool website</a>, they're great! You could make your own themes as well. Try not to take it too far!
         </p>
-        <h2 id="automating">Automating</h2>
         <p>
-            At last, it can all be tied together by writing a simple script which generates the presentations in an instant.
+	For reports, the command is ofcourse different.
+        </p>
+            <pre><code class="language-bash custom-code">
+pandoc "$filename" -t latex -V geometry:margin=1in -V colorlinks=true -V linkcolor=blue -V toccolor=gray -V documentclass=report -o "$basefilename.pdf"
+            </code></pre>
+        <p>
+	With this we'll generate a nice clean LaTeX report. If you want to explore the options I'll refer you to <a href="https://pandoc.org/MANUAL.html" target="_blank">the pandoc documentation</a>.
+        </p>
+        <h2 id="scripting">Scripting</h2>
+        <h3 id="presentation">Presentation</h2>
+        <p>
+            At last, it can all be tied together by writing a simple script which generates our presentation or report in an instant. Let's start with the script for a presentation. Then we will bind this script to a Vim remap.
             <pre><code class="language-bash custom-code">
 #!/bin/bash
 
-# the %p option in the vimrc should give the path!
+# the %p option in the vimrc will give the path
 if [ -z "$1" ]; then
-  echo "Error: No file path provided, check your vimrc definition"
+  echo "Error: No file path provided, check your vimrc trigger definition"
   exit 1
 fi
 
@@ -302,18 +319,121 @@ fi
 	    <p> 
 	    	Save this script in <span class="highl">~/.local/bin</span> as <span class="highl">generate_presentation.sh</span>. Make it executable by running <span class="highl">chmod +x generate_presentation.sh</span>. Finally add the following line to your vimrc: 
 	    </p>
-            <pre><code class="language-bash custom-code">
-nnoremap <Leader>pg :silent !/home/user/.local/bin/generate_presentation.sh %:p&lt;CR&gt;:silent! redraw! &lt;CR&gt;
+            <pre><code class="language-vim custom-code">
+nnoremap <Leader>pg :call system('/home/dyntif/.local/bin/generate_presentation.sh ' . shellescape(expand('%:p')))<CR>:echo "Presentation generated successfully!"<CR>
             </code></pre>
         </p>
         <p>
 	Change <span class="highl">user</span> with your username.
-            This will activate the script with the <span class="highl">leader pg</span> key combination. The <span class="highl">:silent !..</span> option will make it so that you won't be plagued with outputs. The <span class="highl">%p</span> option will give the script the name of the file and directory you're working in. <span class="underl">This would work with any markdown file</span>, but here we'll use it with our Vimwiki-Markdown files.
+        <p>
+            This will activate the script with the <span class="highl">leader pg</span> key combination. The <span class="highl">:silent !..</span> option will make it so that you won't be plagued with outputs. The <span class="highl">%p</span> option will give the script the name of the file and directory you're working in. <span class="underl">This would work with any markdown file</span>. 
         </p>
         <p>
             As you can see, I use mupdf viewer to show me the presentation. This is a very lightweight and easy to use viewer for powerpoints or other pdfs. Perfect for our task! the <span class="highl">-r 350</span> option creates a standard zoom. Using <span class="highl">H</span> when in the presentation sets it right for your client resolution according to height.
         </p>
-	<p class="wit-kader"> I have tested this code in a virtual machine and concluded this works as intended. If you have any questions, feel free to contact me.
+        <h3 id="reoprt">Report</h2>
+        <p>
+	Now let's do almost the exact same thing for generating a report. I'll note that you could change the previous script to work with report or presentation options, but I thought it'd be easier to just make two seperate scripts. 
+        </p>
+        <p>
+	Copy the existing script <span class="highl">cp ~/.local/bin/generate_presentation.sh ~/.local/bin/generate_report.sh</span>.
+	Change the pandoc line -- <span class="highl">10</span> -- in the script above with the report one I mentioned earlier.
+        </p>
+            <pre><code class="language-bash custom-code">
+# pandoc "$filename" -t beamer -V theme=Singapore -V colortheme=albatross -o "$basefilename.pdf" OLD
+pandoc "$filename" -t latex -V geometry:margin=1in -V colorlinks=true -V linkcolor=blue -V toccolor=gray -V documentclass=report -o "$basefilename.pdf"
+            </code></pre>
+        <p>
+	And we'll rewrite the last section to use <span class="highl">zathura</span>, the perfect pdf-viewer for the job. Make sure you have it installed.
+	</p>
+            <pre><code class="language-bash custom-code">
+if [ -f "$basefilename.pdf" ]; then
+  echo "Presentation generated: $basefilename.pdf"
+  # mupdf -r 350 "$basefilename.pdf" & OLD
+  zathura "$basefilename.pdf" &
+else
+  echo "Error generating report."
+  exit 2
+fi
+            </code></pre>
+        <p>
+	Make sure it's executable, same as before!
+	We'll map this to <span class="highl">rg</span>.
+	</p>
+            <pre><code class="language-vim custom-code">
+nnoremap <Leader>rg :call system('/home/dyntif/.local/bin/generate_report.sh ' . shellescape(expand('%:p')))<CR><CR>
+            </code></pre>
+
+        <h2 id="Ideas">Ideas</h2>
+        <p>
+	INSERT VIDEO
+        <p>
+	In this section I'll discuss a small script, relying on the previous thecnique, you can use that helps with keeping ideas or a diary. I will paste the full script here, then discuss functionality.
+	</p>
+        <p>
+	<pre><code class="language-bash custom-code">
+#!/bin/bash
+
+DIR="$HOME/path/to/your/diary/or/ideas/folder"
+ENTRY="$DIR/entry"
+INDEX="$DIR/index.md"
+WEEK=$(date +%Y-%V)
+FILE="$ENTRY/entry_week${WEEK}.md"
+NEWFILE=0
+
+mkdir -p "$ENTRY"
+
+if [ ! -f "$FILE" ]; then
+    echo -e "---\ntitle: $WEEK -- Ideeën\n---\n" > "$FILE"
+    echo "[[entry/entry_week${WEEK}.md]]" >> "$INDEX"
+    NEWFILE=1
+fi
+
+TS="## $(date '+%Y-%m-%d %H:%M:%S')"
+echo -e "\n$TS\n" >> "$FILE"
+
+LINE=$(wc -l < "$FILE")
+vim +"normal! ${LINE}G" +startinsert "$FILE"
+
+if awk "/^$TS\$/ {subsect=1; next} subsect && NF {exit 1}" "$FILE"; then
+    sed -i "/^$TS\$/,/^\(## \|$\)/{ /^$TS\$/d; /^## /!d }" "$FILE"
+    sed -i '/^$/N;/^\n$/d' "$FILE"
+    [ $NEWFILE -eq 1 ] && rm "$FILE"
+fi
+	</code></pre>
+
+	<p>
+	Imagine you are doing some hard work, when suddenly a beautiful idea comes sent down from the Gods right to your head. All you need is a terminal that runs this script, <span class="underl">it will automatically bring you to a premade entry file in your desired folder.</span> You'll be in insert mode beneath a predefined chapter with the current date and time.
+	</p>
+	<p>
+	You just write what you're thinking in markdown and close the file. Your entries for every week will be saved in seperate files. A link to each week's entries is kept in an index file. <span class="underl">If you run the script, write nothing and close the editor, no new header will be created.</span> This is done with the last if statement.
+	</p>
+	<p>
+	I am not able to think of a more easy way of storing thoughts, quick and easily accessible. <span class="underl">Using our presentation/report technique from above, you can read back your notes in a good looking format!</span> 
+	</p>
+	<p>
+	The way I set it up, as shown in the mini-demo, I aliassed it in my <span class="highl">~/.bashrc</span>.
+	<p>
+	<pre><code class="language-bash custom-code">
+alias idd='~/.local/bin/idee.sh'
+	</code></pre>
+	<p>
+	For this to work, save the above script as <span class="highl">~.local/bin/idee.sh</span> and make it executable <span class="highl">chmod +x ~/.local/bin/idee.sh</span>
+	</p>
+	<p>
+	Make sure to alter the script so that the folder is made in your desired location.
+
+        <h2 id="newsboat + Pi-hole">Newsboat + Pi-hole</h2>
+	<p>
+	This is completely unrelated to the previous parts of this post.
+	<p>
+	The broader topic of following news and using Linux for a healthy lifestyle might be worth a seperate blogpost, but I don't have time to write it. Still this idea on its own changed my life. I tought it might be reasonable to share it here.
+	</p>
+        <h3 id="problem formulation">Problem formulation</h2>
+	After realising how unhealthy and unreasonable it was for me to still use YouTube and other sites, I decided 
+
+	<p class="wit-kader"> 
+	I have tested this code in a virtual machine and concluded this works as intended. If you have any questions, feel free to contact me.
 	</p>
 	<div style="padding-bottom: 100px;"></div>
     </div>
