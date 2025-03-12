@@ -364,9 +364,13 @@ fi
 nnoremap <Leader>rg :call system('/home/dyntif/.local/bin/generate_report.sh ' . shellescape(expand('%:p')))<CR><CR>
             </code></pre>
 
-        <h2 id="Ideas">Ideas</h2>
         <p>
-	INSERT VIDEO
+        <h2 id="ideas">Ideas</h2>
+        <p>
+<video class="big-video" autoplay loop muted playsinline preload="metadata">
+    <source src="/static/videos/article1/idea-demo.mp4" type="video/mp4">
+    Your browser does not support this video tag.
+</video>
         <p>
 	In this section I'll discuss a small script, relying on the previous thecnique, you can use that helps with keeping ideas or a diary. I will paste the full script here, then discuss functionality.
 	</p>
@@ -403,7 +407,7 @@ fi
 	</code></pre>
 
 	<p>
-	Imagine you are doing some hard work, when suddenly a beautiful idea comes sent down from the Gods right to your head. All you need is a terminal that runs this script, <span class="underl">it will automatically bring you to a premade entry file in your desired folder.</span> You'll be in insert mode beneath a predefined chapter with the current date and time.
+	Imagine you're hard at work when, out of nowhere, a brilliant idea descends from the heavens straight into your mind. All you need is a terminal that runs this script, <span class="underl">it will automatically bring you to a premade entry file in your desired folder.</span> You'll be in insert mode beneath a predefined chapter with the current date and time.
 	</p>
 	<p>
 	You just write what you're thinking in markdown and close the file. Your entries for every week will be saved in seperate files. A link to each week's entries is kept in an index file. <span class="underl">If you run the script, write nothing and close the editor, no new header will be created.</span> This is done with the last if statement.
@@ -427,14 +431,128 @@ alias idd='~/.local/bin/idee.sh'
 	<p>
 	This is completely unrelated to the previous parts of this post.
 	<p>
-	The broader topic of following news and using Linux for a healthy lifestyle might be worth a seperate blogpost, but I don't have time to write it. Still this idea on its own changed my life. I tought it might be reasonable to share it here.
+	The broader topic of following news and using Linux for a healthy lifestyle might be worth a seperate blogpost, but I don't have time to write it. Still this idea on its own bettered my life. I tought it might be reasonable to share it here.
 	</p>
-        <h3 id="problem formulation">Problem formulation</h2>
-	After realising how unhealthy and unreasonable it was for me to still use YouTube and other sites, I decided 
+        <h3 id="problem">Problem</h2>
+	<p>
+	After realising how unhealthy and unreasonable it was for me to continue using YouTube and other sites, I decided to get a Raspberry Pi and block them with Pi-hole. I then created a strong password, which I wrote down and left somewhere at home so that I couldn't access the blacklist — yes, you could simply unplug the Raspberry Pi, but I knew that to  be a line I wouldn't cross. 
+	However, after doing this, I realised I couldn't maintain the block indefinitely. I needed to revisit a video related to one of my courses, and the bans bothered me so much that I eventually retrieved the password and unblocked them again.
+	</p>
 
-	<p class="wit-kader"> 
-	I have tested this code in a virtual machine and concluded this works as intended. If you have any questions, feel free to contact me.
-	</p>
+<p>
+It wasn't just about missing some older videos; there were also channels I needed to keep following. But having everything unblocked was too distracting. Let me also note that while I’m saying YouTube, this applies to many other sites as well.
+</p>
+
+<h3 id="solution">Solution</h3>
+
+<p>
+I made use of a server I have in my residence. First, I downloaded all the content from useful channels using <span class="highl">yt-dlp</span>, which was the obvious first step.
+</p>
+
+<p>
+I then set up <span class="highl">newsboat</span> and added all the necessary news links. However, if you block the sites again now, no video player will work with newsboat (the sites are blocked), meaning you still wouldn’t be able to watch those videos. Here’s the first workaround:  
+I reconfigured the server’s DNS settings so that it wouldn’t be affected by Pi-hole, then created a macro bound to a script that would download the video on the server. The script would then mount the folder containing the downloaded video on my laptop — you'll need to set up SSH configurations for this — and play the video locally with mpv.
+</p>
+
+<p>
+I'll share the macro and the script on the local side, as those were tricky.
+</p>
+
+	<pre><code class="language-bash">
+macro w set browser "~/.local/bin/download-server.sh %u" ; open-in-browser ; set browser linkhandler
+	</code></pre>
+
+	<pre><code class="language-bash">
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <link>"
+    exit 1
+fi
+
+# Server configuration
+SERVER_USER="dyntif" 
+SERVER_IP="192.168.0.249"  
+REMOTE_SCRIPT="~/.local/bin/download-video.sh"
+LOCAL_MOUNT_POINT=~/persoonlijk/superfiles/problematisnoi
+DOWNLOAD_DIR="$LOCAL_MOUNT_POINT/yt/vandaag/"
+
+# 1. Execute the download script on the server
+ssh "$SERVER_USER@$SERVER_IP" "$REMOTE_SCRIPT '$1'"
+
+# 2. Mount the server folder locally
+sshfs "$SERVER_USER@$SERVER_IP:/home/$SERVER_USER/superfiles/problematisnoi" "$LOCAL_MOUNT_POINT"
+
+# 3. Find the most recently downloaded video
+latest_file=$(ssh "$SERVER_USER@$SERVER_IP" "find ~/superfiles/problematisnoi/yt/vandaag/ -type f -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-")
+
+# 4. Check if a file was found
+if [ -z "$latest_file" ]; then
+    echo "No new video found to play."
+    exit 1
+fi
+
+# 5. Play the most recently downloaded video with mpv
+mpv "$LOCAL_MOUNT_POINT/yt/vandaag/$(basename "$latest_file")"
+	</code></pre>
+
+<p>
+Now, you can block sites while still having a way to download content. There's one problem left: newsboat won’t be able to refresh YouTube links. To fix this, I wrote a script on the Raspberry Pi that blocks domains unless any of them are on a whitelist. If so, it unblocks them instead.
+</p>
+
+	<pre><code class="language-bash">
+#!/bin/bash
+# ~/serverscripts/block-yt.sh
+
+DOMAINS=("youtube.com" "www.youtube.com" "m.youtube.com" "s.youtube.com")
+
+whitelist_count=0
+blacklist_count=0
+
+for domain in "${DOMAINS[@]}"; do
+    status=$(pihole -q "$domain" 2>&1)
+    if echo "$status" | grep -qi "exact whitelist"; then
+        whitelist_count=$((whitelist_count+1))
+    elif echo "$status" | grep -qi "exact blacklist"; then
+        blacklist_count=$((blacklist_count+1))
+    fi
+done
+
+# Check status and take the necessary action
+if [ "$whitelist_count" -gt 0 ]; then
+    echo "One or more domains are whitelisted. Blocking..."
+    pihole -b "${DOMAINS[@]}"
+elif [ "$blacklist_count" -eq "${#DOMAINS[@]}" ]; then
+    echo "All domains are blacklisted. Unblocking..."
+    pihole -w "${DOMAINS[@]}"
+else
+    echo "Not all domains have a clear status; no action taken."
+fi
+
+pihole restartdns
+	</code></pre>
+
+<p>
+We can use this <span class="underl">during the newsboat startup to briefly allow access</span>, in an automated way so that you can’t cheat.
+</p>
+
+	<pre><code class="language-bash">
+#!/bin/bash
+
+~/.config/newsboat/unblock-yt.sh &
+
+# Wait 10 seconds and block YouTube again, independently of Newsboat
+(sleep 10 && ~/.config/newsboat/unblock-yt.sh) &
+
+newsboat
+	</code></pre>
+
+<p>
+Use this to start newsboat, where <span class="highl">unblock-yt.sh</span> simply triggers the Raspberry Pi script. I found it only worked when written in this odd way.
+</p>
+
+
+	<p>
 	<div style="padding-bottom: 100px;"></div>
     </div>
     <script src="/static/syntax/prism.js"></script>
