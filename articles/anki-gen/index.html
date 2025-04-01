@@ -21,7 +21,8 @@
         <h1>My lightweight anki converter and usage with Vim</h1>
 	<p> 
 	<em>
-		When using anki cards I tend to memorise quicker. I take notes in LaTeX or Markdown with Vim. It therefore seemed natural to write a few python scripts and generate these cards from my notes. This has been a major improvement to my studying method.
+		When using anki cards I tend to memorise quicker. 
+		I take notes in LaTeX or Markdown using Vim, so it felt natural to write a few Python scripts to generate these cards from my notes.
 	</em>
 	</p>
 
@@ -29,22 +30,22 @@
     Your browser does not support the video tag.
 </video>
 	<p> 
-		The source code for this project can be found on my GitHub. Here I will explain the ideas as well as how I use it with Vim and with my LaTeX preamble settings. For LaTeX, this will work out of the box. To use it for Markdown and other filetypes you'll need to be creative with using commenting in different langueges and tweeking the parser script a little. I'm using only slightly different code for Markdown.
+	The only thing you will need is a working Anki install with the <span class="highl"><a href="https://github.com/amikey/anki-connect" target="_blank">AnkiConnect</a></span> plugin, Python, and ofcourse Vim. Anki needs to be running for the scripts to work.
+	<p> 
+	The source code for this project can be found <a href="https://github.com/tibo-fordeyn" target="_blank">on my GitHub</a>. Here I will explain the ideas as well as how I use it with Vim. To use the technique for Markdown or other filetypes you'll need to be creative with using commenting in different langueges and tweeking the parser script a little. 
 	</p>
 	
 	<h2 id="parsing">Parsing</h2>
 <p> 
-	This is really the most defining step for a project like this. What was
-	important to me was <span class="underl">to have the ability to decide
-	which parts within my files should become questions and answers</span>.
-But I obviously didn't want to go and use external files or anything that would
-take time. Therefore I'd need to have a parser defined to look at certain patterns -- ques -- within the script. 
-	Now the downside to this is that it might obscure your document. It might cause you to think about the cards while writing lecture notes -- which we do not want!
-	<span class="underl">What I found to be the best option, is to define
-		certain ques for the .tex file that won't be annoying.</span>
-	They'll be easy to make and manage. They won't be in the way when
-	writing. To make this happen I use Vim functionality. The scripts will
-	ofcourse function independent of your editor, but the efficiency comes from Vim. In what follows I'll start by discussing the parser, then how to make things look clean while writing
+This is truly the most defining step for a project like this. What mattered to me was <span class="underl">being able to decide which parts of my files should become questions and answers</span>.  
+But I obviously didn't want to manually place them in external files or do anything that would take up time. So, I needed a parser to detect certain patterns—ques—within the notes.  
+
+The downside is that this might clutter your document. It could make you think about the cards while writing lecture notes—something we don't want!  
+<span class="underl">I found certain ques for the <span class="highl">.tex</span> file that aren't disruptive.</span>  
+They're easy to create and manage, and they won’t get in the way while writing.  
+
+To achieve this, I use Vim functionality. The scripts will, of course, work independently of your editor, but the efficiency comes from Vim. In what follows, I'll first discuss the parser and then explain how to keep things clean while writing.  
+
 </p>
 <h3 id="Parser functioning">Parser functioning</h3>
 <p> 
@@ -122,9 +123,6 @@ Where the key is your box command, the value is what will be displayed as <span 
 		<li>If a question or answer was commented out of the file, the parser will throw it out.</li>
 	</ol>
 </p>
-<p> 
-	To put it in simple terms, that just means there always has to be a well-defined question, followed by a well-defined answer, to make a card. Where well-defined would mean anki accepts it.
-</p>
 
 <h3 id="automating with vim">Automating with Vim</h3>
 <p> 
@@ -156,7 +154,7 @@ vnoremap &lt;leader&gt;a :&lt;C-U&gt;call SurroundWithAnki('akns')&lt;CR&gt; " A
 <h4 id="snippets">Snippets</h4>
 <p> 
 Here I use snippets to define the anki commands within my box snippets. I would
-not do this for all boxes, as you might not want every box to eventually turn into a card. But for the definition box, as an example, I've defined the following in my <span class="highl">~/.vim/UltiSnips/tex.snippets</span>;
+not do this for all boxes, as you might not want every box to eventually turn into a card. But for the definition box, as an example, I defined the following in my <span class="highl">~/.vim/UltiSnips/tex.snippets</span>;
 </p>
 <pre><code class="language-vim">snippet dfin "Definitie kader!" bA
 \dfn{$1}{\akq{
@@ -182,7 +180,7 @@ I won't get too deep into concealing, because that's a whole other topic. Though
 syntax match texAkns "\\akns" conceal cchar=! 
 </code></pre> 
 <p> 
-	Make sure you have vim-conceal plugins installed. These should give the <span class="highl">?</span> and <span class="highl">!</span> functionality. Those will always be shown unless you toggle conceal. 
+ These lines should give you the <span class="highl">?</span> and <span class="highl">!</span> functionality. Those will always be shown unless you toggle conceal. 
 </p>
 <p> 
 	This might still distract. You could also opt for just no conceal character. 
@@ -204,10 +202,10 @@ To switch the card of a deck we use <span class="highl">leader as</span>. This w
 
 </p>
 <p> 
-	The command obviously will first list you all the decks you have with
-	dmenu. <span class="underl">You can select one, but you could also
+	The command will first list all your decks using <span class="highl">dmenu</span>. 
+	<span class="underl">You can select one, but you could also
 	write a new deck name.</span> Then a new deck wil be created. You can
-even make a new subdeck without first creating the lower deck. Just write <span
+even create a new subdeck without first creating the parent deck. Just write <span
 	class="highl">deck::subdeck</span>.
 </p>
 <p> 
@@ -216,23 +214,16 @@ even make a new subdeck without first creating the lower deck. Just write <span
 </p>
 <h3 id="empty and delete">Empty and Delete</h3>
 <p> 
-	The existence of these cards kind of goes against the philosophy of
+	The existence of these commands kind of goes against the philosophy of
 	this project. I don't want this to be some remote operation anki thing.
 	But being able to delete -- <span class="highl">leader ad</span> -- a
 	deck when needed, or emptying -- <span class="highl">leader ae</span>
 	-- one, seemed useful. Emptying a deck only has a usecase when making subdecks. It's trivial, but can be useful for when you decide to split big decks up. This in general you should do because switching will always delete anki's memory of your previous cards.
-	<p> 
-	<div style="text-align: center;">
-    		<img src="/static/images/screenshot.png" alt="Screenshot" width="600" />
-	</div>
 
-	</p>
-</p>
+	<h2 id="extras">Extras</h2>
+<p> 
+Many documents contain screenshots, and you might also include drawings from Inkscape. To wrap up, <span class="underl">I want to highlight that these will be included in the cards!</span> Inline math will be rendered correctly, and even itemized and enumerated lists will be processed properly.
 
-	<h2 id="conclusion">Conclusion</h2>
-	<p> 
-		These scripts and tips should enable you to generate anki cards from your LaTeX notes with Vim. To generalize for Makdown or other typescripting langueges, all you should do is recognise which "commands" won't impact your document, but will be easy for a script to pick up on. Use those instead of the ones here in the <span class="highl">parser.py</span> script, then rewrite all the related Vim commands, you'll be good to go!
-	</p>
 
 
 	<div style="padding-bottom: 100px;"></div>
